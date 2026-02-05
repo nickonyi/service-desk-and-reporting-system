@@ -13,13 +13,13 @@ function Login() {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md flex  "
       >
-        <div className="bg-gray-100 p-8  border border-gray-200  rounded-lg shadow-lg">
+        <div className="bg-gray-100  p-8  border border-gray-200  rounded-lg shadow-lg">
           <div className="text-center mb-8">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2 }}
-              className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4"
+              className="gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4"
             ></motion.div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
             <p className="text-gray-600">Sign in to ServiceDesk </p>
@@ -33,7 +33,7 @@ function Login() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="input-field pl-10"
+                  className="input-field pl-10 border border-black rounded-sm"
                   placeholder="your@email.com"
                   required
                 />
@@ -48,7 +48,7 @@ function Login() {
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="input-field pl-10"
+                  className="input-field pl-10 border border-black rounded-sm"
                   placeholder="••••••••"
                   required
                 />
@@ -60,7 +60,7 @@ function Login() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="bg-black w-full text-white rounded-sm"
+              className="bg-black w-full py-1 text-white rounded-sm"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </motion.button>
