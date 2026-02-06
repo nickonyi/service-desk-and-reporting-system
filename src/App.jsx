@@ -1,7 +1,7 @@
 import './styles/style.css';
 
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
