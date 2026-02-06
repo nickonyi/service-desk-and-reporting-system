@@ -4,12 +4,10 @@ import DonutPlaceholder from '../mainBoardComponents/DonutPlaceholder';
 function MainBoard() {
   return (
     <main className="flex-1 space-y-6 bg-white">
-      {/* Header */}
       <div className="border-b p-6 border-gray-200">
         <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
       </div>
 
-      {/* Filters */}
       <div className="flex p-6 flex-wrap gap-4">
         {['Last 30 Days', 'Team', 'Agent'].map((item) => (
           <div
@@ -22,7 +20,6 @@ function MainBoard() {
         ))}
       </div>
 
-      {/* Stat Cards */}
       <div className="grid grid-cols-1 p-6 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {[
           { label: 'Tickets', value: '3' },
@@ -42,13 +39,10 @@ function MainBoard() {
         ))}
       </div>
 
-      {/* Charts Row */}
       <div className="grid px-6 grid-cols-1 lg:grid-cols-2 gap-6">
         <ChartPlaceholder title="Ticket Trend" />
         <ChartPlaceholder title="Feedback Trend" />
       </div>
-
-      {/* Donut Charts */}
       <div className="grid px-6 pb-6 grid-cols-1 md:grid-cols-2 gap-6">
         <DonutPlaceholder title="Tickets by Team" />
         <DonutPlaceholder title="Tickets by Type" />
