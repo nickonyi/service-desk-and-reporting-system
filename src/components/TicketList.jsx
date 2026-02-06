@@ -81,6 +81,106 @@ function TicketList() {
         color: '#F59E0B', // amber
       },
     },
+    {
+      id: 3,
+      ticket_number: 'TCK-1025',
+      title: 'Laptop overheating and shutting down',
+      requester_name: 'Michael Brown',
+      created_at: '2026-02-03T08:45:00Z',
+
+      categories: {
+        id: 1,
+        name: 'Hardware',
+        color: '#10B981', // green
+      },
+
+      priorities: {
+        id: 4,
+        name: 'Critical',
+        color: '#EF4444', // red
+      },
+
+      statuses: {
+        id: 3,
+        name: 'Pending',
+        color: '#F59E0B', // amber
+      },
+    },
+    {
+      id: 3,
+      ticket_number: 'TCK-1025',
+      title: 'Laptop overheating and shutting down',
+      requester_name: 'Michael Brown',
+      created_at: '2026-02-03T08:45:00Z',
+
+      categories: {
+        id: 1,
+        name: 'Hardware',
+        color: '#10B981', // green
+      },
+
+      priorities: {
+        id: 4,
+        name: 'Critical',
+        color: '#EF4444', // red
+      },
+
+      statuses: {
+        id: 3,
+        name: 'Pending',
+        color: '#F59E0B', // amber
+      },
+    },
+    {
+      id: 3,
+      ticket_number: 'TCK-1025',
+      title: 'Laptop overheating and shutting down',
+      requester_name: 'Michael Brown',
+      created_at: '2026-02-03T08:45:00Z',
+
+      categories: {
+        id: 1,
+        name: 'Hardware',
+        color: '#10B981', // green
+      },
+
+      priorities: {
+        id: 4,
+        name: 'Critical',
+        color: '#EF4444', // red
+      },
+
+      statuses: {
+        id: 3,
+        name: 'Pending',
+        color: '#F59E0B', // amber
+      },
+    },
+    {
+      id: 3,
+      ticket_number: 'TCK-1025',
+      title: 'Laptop overheating and shutting down',
+      requester_name: 'Michael Brown',
+      created_at: '2026-02-03T08:45:00Z',
+
+      categories: {
+        id: 1,
+        name: 'Hardware',
+        color: '#10B981', // green
+      },
+
+      priorities: {
+        id: 4,
+        name: 'Critical',
+        color: '#EF4444', // red
+      },
+
+      statuses: {
+        id: 3,
+        name: 'Pending',
+        color: '#F59E0B', // amber
+      },
+    },
   ]);
   const categories = [
     { id: 1, name: 'Hardware' },
@@ -121,7 +221,7 @@ function TicketList() {
       <div className="border-b p-2 pl-6 border-gray-200 flex justify-between">
         <h2 className="text-xl font-semibold text-gray-800">Tickets</h2>
         <div className="flex items-center gap-2">
-          <button className="bg-black text-white px-4 py-0.5 rounded-lg flex items-center gap-1 hover:bg-blue-600 transition-colors">
+          <button className="bg-black text-white px-4 py-0.5 cursor-pointer rounded-lg flex items-center gap-1 transition-colors">
             <Plus size={18} />
             Create
           </button>
