@@ -14,10 +14,12 @@ function NewTicketForm() {
   const onClose = () => {};
 
   return (
-    <div className="border-b p-6 pl-6 border-gray-200 flex flex-col gap-4 w-full max-w-2xl">
-      <h2 className="text-xl font-semibold text-gray-800">Tickets</h2>
+    <div className="border-b border-gray-200 flex flex-col gap-4 flex-2 bg-white">
+      <h2 className="text-xl px-6 py-2 font-semibold text-gray-800 border-b">
+        Tickets/ <span className="text-md font-light text-gray-600">New Ticket</span>
+      </h2>
 
-      <div className="flex justify-center items-center p-6 bg-white rounded-lg shadow">
+      <div className="flex justify-center items-center p-6  ">
         <form onSubmit={handleSubmit} className="p-6 space-y-4 ">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
@@ -59,13 +61,13 @@ function NewTicketForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Priority *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status *</label>
               <select
                 value={formData.priority_id}
                 onChange={(e) => setFormData({ ...formData, priority_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Select priority</option>
+                <option value="">Select status</option>
                 {priorities.map((priority) => (
                   <option key={priority.id} value={priority.id}>
                     {priority.name}
@@ -77,7 +79,7 @@ function NewTicketForm() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Your Name *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
               <input
                 type="text"
                 value={formData.requester_name}
@@ -88,7 +90,7 @@ function NewTicketForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Your Email *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">SKU *</label>
               <input
                 type="email"
                 value={formData.requester_email}
@@ -110,7 +112,7 @@ function NewTicketForm() {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Create Ticket'}
             </button>
