@@ -1,14 +1,9 @@
 import './styles/style.css';
 
 import Login from './pages/Login';
-import Dashboard from './components/Dashboard';
 
 function App() {
-  return (
-    <>
-      <Dashboard />
-    </>
-  );
+  return <></>;
 }
 
 export default App;
