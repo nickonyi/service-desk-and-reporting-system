@@ -1,4 +1,3 @@
-import { LayoutDashboard, Ticket, BookOpen, Users, FileText, Search } from 'lucide-react';
 import ControlPanel from './ControlPanel';
 import NavBar from './NavBar';
 
