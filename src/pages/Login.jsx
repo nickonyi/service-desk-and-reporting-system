@@ -1,4 +1,16 @@
+import { useNavigate } from 'react-router';
+import { useAuth } from '../context/AuthContext';
+
 function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    login();
+    navigate('/dashboard');
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md">
@@ -8,7 +20,7 @@ function Login() {
           </div>
         </div>
         <h1 className="text-2xl font-semibold  mb-6">Welcome to the service desk</h1>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email

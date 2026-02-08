@@ -1,25 +1,27 @@
 import { LayoutDashboard, Ticket, Search, BookOpen, Users, FileText } from 'lucide-react';
+import { NavLink } from 'react-router';
 
 function NavBar() {
+  const menuItems = [
+    { label: 'Search', icon: Search, path: '/search' },
+    { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+    { label: 'Tickets', icon: Ticket, path: '/dashboard/tickets' },
+    { label: 'Knowledge Base', icon: BookOpen, path: '/dashboard/knowledge' },
+  ];
   return (
     <nav className="space-y-1 text-sm">
-      {[
-        { label: 'Search', icon: Search },
-        { label: 'Dashboard', icon: LayoutDashboard },
-        { label: 'Tickets', icon: Ticket },
-        { label: 'Knowledge Base', icon: BookOpen },
-        { label: 'Customers', icon: Users },
-        { label: 'Reports', icon: FileText },
-      ].map(({ label, icon: Icon }) => (
-        <div
+      {menuItems.map(({ label, icon: Icon, path }) => (
+        <NavLink
+          end
           key={label}
-          className="flex items-center gap-3 px-3 py-2 rounded-md
+          to={path}
+          className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-md
                          text-gray-700 hover:bg-gray-100 hover:text-gray-700
-                         cursor-pointer"
+                         cursor-pointer  ${isActive ? 'bg-white text-black' : 'text-gray-700 hover:bg-gray-100'}`}
         >
           <Icon size={16} />
           <span>{label}</span>
-        </div>
+        </NavLink>
       ))}
     </nav>
   );
