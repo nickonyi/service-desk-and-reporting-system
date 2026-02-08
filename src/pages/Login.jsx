@@ -1,14 +1,22 @@
 import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
 
 function Login() {
   const { login } = useAuth();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login();
-    navigate('/dashboard');
+    const success = login(username, password);
+    if (success) {
+      navigate('/dashboard');
+    } else {
+      setError('Invalid credetials');
+    }
   };
 
   return (
@@ -20,6 +28,7 @@ function Login() {
           </div>
         </div>
         <h1 className="text-2xl font-semibold  mb-6">Welcome to the service desk</h1>
+        {error && <p className="text-red-500">{error}</p>}
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -30,6 +39,7 @@ function Login() {
               id="email"
               placeholder="Enter your email"
               className="input w-full"
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div>
@@ -41,6 +51,7 @@ function Login() {
               id="password"
               placeholder="Enter your password"
               className="input w-full"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
