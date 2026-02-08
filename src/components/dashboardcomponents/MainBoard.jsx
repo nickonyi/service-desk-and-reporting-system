@@ -3,7 +3,7 @@ import DonutPlaceholder from '../mainBoardComponents/DonutPlaceholder';
 
 function MainBoard() {
   return (
-    <main className="flex-1 space-y-6 bg-white">
+    <div className="flex-1 space-y-6 bg-white">
       <div className="border-b p-6 border-gray-200">
         <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
       </div>
@@ -49,7 +49,7 @@ function MainBoard() {
         <DonutPlaceholder title="Tickets by Priority" />
         <DonutPlaceholder title="Tickets by Channel" />
       </div>
-    </main>
+    </div>
   );
 }
 

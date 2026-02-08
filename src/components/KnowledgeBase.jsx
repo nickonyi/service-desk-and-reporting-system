@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, Plus, BookOpen, Calendar, User, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 const KnowledgeBase = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // Sample data - replace with your actual data
+  const navigate = useNavigate();
   const categories = [
     { id: 'all', name: 'All Articles', count: 24 },
     { id: 'getting-started', name: 'Getting Started', count: 8 },
@@ -52,90 +53,76 @@ const KnowledgeBase = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 ">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 border-b border-gray-200 p-2">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <BookOpen className="w-8 h-8 text-blue-600" />
               <h1 className="text-3xl font-bold text-gray-900">Knowledge Base</h1>
             </div>
-            <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
+            <button
+              className="flex items-center gap-2 bg-black cursor-pointer text-white px-4 py-2 rounded-lg  shadow-sm"
+              onClick={() => navigate('add')}
+            >
               <Plus className="w-5 h-5" />
               Add Article
             </button>
           </div>
-          <p className="text-gray-600">Find answers and learn about our application</p>
         </div>
 
-        {/* Search Bar */}
-        <div className="mb-6">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search articles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+        <div className="p-6">
+          {/* Search Bar */}
+          <div className="mb-6">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Categories */}
-        <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
-                selectedCategory === category.id
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-              }`}
-            >
-              {category.name} ({category.count})
-            </button>
-          ))}
-        </div>
+          {/* Articles Grid */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {filteredArticles.map((article) => (
+              <div
+                key={article.id}
+                className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{article.title}</h3>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{article.excerpt}</p>
 
-        {/* Articles Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredArticles.map((article) => (
-            <div
-              key={article.id}
-              className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-            >
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{article.title}</h3>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">{article.excerpt}</p>
-
-              <div className="flex items-center justify-between text-xs text-gray-500">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    <User className="w-3 h-3" />
-                    <span>{article.author}</span>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1">
+                      <User className="w-3 h-3" />
+                      <span>{article.author}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      <span>{article.date}</span>
+                    </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    <span>{article.date}</span>
+                    <Eye className="w-3 h-3" />
+                    <span>{article.views}</span>
                   </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  <span>{article.views}</span>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* No Results */}
-        {filteredArticles.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No articles found matching your criteria.</p>
+            ))}
           </div>
-        )}
+
+          {/* No Results */}
+          {filteredArticles.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No articles found matching your criteria.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

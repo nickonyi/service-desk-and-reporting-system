@@ -33,6 +33,10 @@ export const router = createBrowserRouter([
             path: 'tickets',
             element: <TicketList />,
           },
+          {
+            path: 'tickets/new',
+            element: <NewTicketForm />,
+          },
         ],
       },
     ],

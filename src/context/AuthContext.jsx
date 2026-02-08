@@ -4,6 +4,10 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const users = [
+    { username: 'admin', password: '1234', role: 'admin' },
+    { username: 'john', password: 'abcd', role: 'user' },
+  ];
 
   const login = () => setIsAuthenticated(true);
 

@@ -1,6 +1,7 @@
 import { Plus, Search, Filter, User, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { tableHeaders } from '../data.js';
+import { useNavigate } from 'react-router';
 
 function TicketList() {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -216,12 +217,16 @@ function TicketList() {
     }).format(date);
   };
 
+  const navigate = useNavigate();
   return (
     <div className="flex-1 space-y-6  ">
       <div className="border-b p-2 pl-6 border-gray-200 flex justify-between">
         <h2 className="text-xl font-semibold text-gray-800">Tickets</h2>
         <div className="flex items-center gap-2">
-          <button className="bg-black text-white px-4 py-0.5 cursor-pointer rounded-lg flex items-center gap-1 transition-colors">
+          <button
+            className="bg-black text-white px-4 py-0.5 cursor-pointer rounded-lg flex items-center gap-1 transition-colors"
+            onClick={() => navigate('new')}
+          >
             <Plus size={18} />
             Create
           </button>
