@@ -2,11 +2,15 @@ import { Plus, Search, Filter, User, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { tableHeaders } from '../data.js';
 import { useNavigate } from 'react-router';
+import { useTickets } from '../context/TicketsContext.jsx';
 
 function TicketList() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPriority, setSelectedPriority] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const { tickets } = useTickets();
+  console.log(tickets);
+
   const [filteredTickets, setFilteredTickets] = useState([
     {
       id: 1,
@@ -206,6 +210,22 @@ function TicketList() {
     { id: 3, name: 'High', level: 3, color: 'orange' },
     { id: 4, name: 'Critical', level: 4, color: 'red' },
   ];
+
+  const getPriorityBadge = (priorityId) => {
+    const colors = {
+      1: 'bg-green-100 text-green-800',
+      2: 'bg-yellow-100 text-yellow-800',
+      3: 'bg-orange-100 text-orange-800',
+      4: 'bg-red-100 text-red-800',
+    };
+    const names = { 1: 'Low', 2: 'Medium', 3: 'High', 4: 'Critical' };
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priorityId]}`}>
+        {names[priorityId]}
+      </span>
+    );
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('en-US', {
@@ -219,7 +239,7 @@ function TicketList() {
 
   const navigate = useNavigate();
   return (
-    <div className="flex-1 space-y-6  ">
+    <div className="flex-1 space-y-6 bg-white  ">
       <div className="border-b p-2 pl-6 border-gray-200 flex justify-between">
         <h2 className="text-xl font-semibold text-gray-800">Tickets</h2>
         <div className="flex items-center gap-2">
@@ -292,7 +312,7 @@ function TicketList() {
         </div>
 
         <div className="bg-white mt-8 rounded-lg shadow  overflow-hidden">
-          {filteredTickets.length === 0 ? (
+          {tickets.length === 0 ? (
             <div className="text-center py-10 text-gray-500">
               <Filter size={48} className="mx-auto mb-4 opacity-50" />
               <p className="text-gray-500">No tickets found.</p>
@@ -313,64 +333,28 @@ function TicketList() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredTickets.map((ticket) => (
+                  {tickets.map((ticket) => (
                     <tr
                       key={ticket.id}
-                      onClick={() => onTicketClick(ticket)}
-                      className="hover:bg-gray-50 cursor-pointer transition-colors"
+                      onClick={() => navigate(`/tickets/${ticket.id}`)}
+                      className="hover:bg-gray-50 cursor-pointer"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-blue-600">
-                          {ticket.ticket_number}
-                        </div>
+                      <td className="px-6 py-4 text-sm text-gray-900">#{ticket.id}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                        {ticket.title}
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900 font-medium">{ticket.title}</div>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                        {ticket.category_id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className="px-2 py-1 text-xs font-medium rounded-full"
-                          style={{
-                            backgroundColor: `${ticket.categories.color}20`,
-                            color: ticket.categories.color,
-                          }}
-                        >
-                          {ticket.categories.name}
-                        </span>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                        {ticket.location}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className="px-2 py-1 text-xs font-medium rounded-full"
-                          style={{
-                            backgroundColor: `${ticket.priorities.color}20`,
-                            color: ticket.priorities.color,
-                          }}
-                        >
-                          {ticket.priorities.name}
-                        </span>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                        {ticket.status}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className="px-2 py-1 text-xs font-medium rounded-full"
-                          style={{
-                            backgroundColor: `${ticket.statuses.color}20`,
-                            color: ticket.statuses.color,
-                          }}
-                        >
-                          {ticket.statuses.name}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-gray-900">
-                          <User size={16} className="mr-2 text-gray-400" />
-                          {ticket.requester_name}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Clock size={16} className="mr-2" />
-                          {formatDate(ticket.created_at)}
-                        </div>
+                      <td className="px-6 py-4 text-sm">{ticket.assigned_to}</td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {new Date(ticket.created_at).toLocaleDateString()}
                       </td>
                     </tr>
                   ))}

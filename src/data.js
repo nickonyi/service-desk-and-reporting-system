@@ -4,7 +4,6 @@ export const tableHeaders = [
   'Category',
   'location',
   'Status',
-  'sku',
   'Assigned',
   'Created',
 ];

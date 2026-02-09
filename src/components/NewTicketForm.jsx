@@ -1,14 +1,69 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTickets } from '../context/TicketsContext';
 
 function NewTicketForm() {
-  const [formData, setFormData] = useState({});
-  const categories = [];
-  const priorities = [];
-  const loading = false;
+  const navigate = useNavigate();
+  const { addTicket } = useTickets();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    category_id: '',
+    priority_id: '',
+    site_visit: '',
+    location: '',
+    sku: '',
+    assigned_to: '',
+  });
+
+  // Sample data - replace with your actual data
+  const categories = [
+    { name: 'Hardware' },
+    { name: 'Software' },
+    { name: 'Network' },
+    { name: 'Database' },
+  ];
+
+  const priorities = [{ name: 'Low' }, { name: 'Medium' }, { name: 'High' }, { name: 'Critical' }];
+
+  const siteVisitOptions = [
+    { id: 'remote', name: 'remote' },
+    { id: 'onsite', name: 'onsite' },
+  ];
+
+  const locations = [
+    { name: 'Bugolobi' },
+    { name: 'Acacia' },
+    { name: 'The Hub' },
+    { name: 'Yaya' },
+    { name: 'sarit' },
+  ];
+
+  const technicians = [{ name: 'Tier 1' }, { name: 'Tier 2' }, { name: 'Tier 3' }];
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+
+    // Simple validation
+    if (!formData.title || !formData.description || !formData.category_id) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setLoading(true);
+
+    // Simulate API delay
+    setTimeout(() => {
+      const newTicket = addTicket(formData);
+      setLoading(false);
+
+      // Redirect to tickets list
+      navigate('/dashboard/tickets');
+
+      // Or if you want to go to the specific ticket detail page:
+      // navigate(`/tickets/${newTicket.id}`);
+    }, 500);
   };
 
   const onClose = () => {};
@@ -19,8 +74,8 @@ function NewTicketForm() {
         Tickets/ <span className="text-md font-light text-gray-600">New Ticket</span>
       </h2>
 
-      <div className="flex justify-center items-center p-6  ">
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 ">
+      <div className="flex justify-center items-center p-6">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 w-full max-w-4xl">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
             <input
@@ -29,6 +84,7 @@ function NewTicketForm() {
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Brief description of the issue"
+              required
             />
           </div>
 
@@ -40,6 +96,7 @@ function NewTicketForm() {
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Detailed description of the issue"
+              required
             />
           </div>
 
@@ -50,6 +107,7 @@ function NewTicketForm() {
                 value={formData.category_id}
                 onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
               >
                 <option value="">Select category</option>
                 {categories.map((cat) => (
@@ -61,13 +119,14 @@ function NewTicketForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Priority *</label>
               <select
                 value={formData.priority_id}
                 onChange={(e) => setFormData({ ...formData, priority_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
               >
-                <option value="">Select status</option>
+                <option value="">Select priority</option>
                 {priorities.map((priority) => (
                   <option key={priority.id} value={priority.id}>
                     {priority.name}
@@ -75,17 +134,19 @@ function NewTicketForm() {
                 ))}
               </select>
             </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Site visit *</label>
               <select
-                value={formData.priority_id}
-                onChange={(e) => setFormData({ ...formData, priority_id: e.target.value })}
+                value={formData.site_visit}
+                onChange={(e) => setFormData({ ...formData, site_visit: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
               >
-                <option value="">Select status</option>
-                {priorities.map((priority) => (
-                  <option key={priority.id} value={priority.id}>
-                    {priority.name}
+                <option value="">Select option</option>
+                {siteVisitOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
                   </option>
                 ))}
               </select>
@@ -94,53 +155,54 @@ function NewTicketForm() {
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Locaton *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
               <select
-                value={formData.priority_id}
-                onChange={(e) => setFormData({ ...formData, priority_id: e.target.value })}
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
               >
-                <option value="">Select status</option>
-                {priorities.map((priority) => (
-                  <option key={priority.id} value={priority.id}>
-                    {priority.name}
+                <option value="">Select location</option>
+                {locations.map((loc) => (
+                  <option key={loc.id} value={loc.id}>
+                    {loc.name}
                   </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">SKU *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">SKU</label>
               <input
                 type="text"
-                value={formData.requester_email}
-                onChange={(e) => setFormData({ ...formData, requester_email: e.target.value })}
+                value={formData.sku}
+                onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="60078..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Assigned to *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Assigned to</label>
               <select
-                value={formData.priority_id}
-                onChange={(e) => setFormData({ ...formData, priority_id: e.target.value })}
+                value={formData.assigned_to}
+                onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">Select status</option>
-                {priorities.map((priority) => (
-                  <option key={priority.id} value={priority.id}>
-                    {priority.name}
+                <option value="">Select technician</option>
+                {technicians.map((tech) => (
+                  <option key={tech.id} value={tech.id}>
+                    {tech.name}
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 ">
+          <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => navigate('/tickets')}
               className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
             >
               Cancel
@@ -148,7 +210,7 @@ function NewTicketForm() {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Create Ticket'}
             </button>
