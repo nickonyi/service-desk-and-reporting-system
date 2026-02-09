@@ -19,7 +19,6 @@ export const TicketsProvider = ({ children }) => {
       id: Date.now(), // Simple ID generation for frontend
       ...ticketData,
       created_at: new Date().toISOString(),
-      status: 'open',
     };
     setTickets((prev) => [newTicket, ...prev]);
     return newTicket;
