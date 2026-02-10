@@ -211,19 +211,23 @@ function TicketList() {
     { id: 4, name: 'Critical', level: 4, color: 'red' },
   ];
 
-  const getPriorityBadge = (priorityId) => {
-    const colors = {
-      1: 'bg-green-100 text-green-800',
-      2: 'bg-yellow-100 text-yellow-800',
-      3: 'bg-orange-100 text-orange-800',
-      4: 'bg-red-100 text-red-800',
-    };
-    const names = { 1: 'Low', 2: 'Medium', 3: 'High', 4: 'Critical' };
-    return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priorityId]}`}>
-        {names[priorityId]}
-      </span>
-    );
+  const getStatusColors = (status) => {
+    console.log(status);
+
+    switch (status.toLowerCase()) {
+      case 'open':
+        return 'text-green-800';
+      case 'in progress':
+        return 'text-yellow-800';
+      case 'resolved':
+        return 'text-blue-800';
+      case 'awaiting user':
+        return 'text-emarald-700';
+      case 'awaiting vendor':
+        return 'text-cyan-700';
+      default:
+        return ' text-gray-600';
+    }
   };
 
   const navigate = useNavigate();
@@ -328,7 +332,7 @@ function TicketList() {
                       onClick={() => navigate(`/tickets/${ticket.id}`)}
                       className="hover:bg-gray-50 cursor-pointer"
                     >
-                      <td className="px-6 py-4 text-sm text-gray-900">#{ticket.id}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">#{ticket.sku}</td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.title}
                       </td>
@@ -338,7 +342,9 @@ function TicketList() {
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.location}
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      <td
+                        className={`px-6 py-4 text-sm font-medium text-gray-900 ${getStatusColors(ticket.status)}`}
+                      >
                         {ticket.status}
                       </td>
                       <td className="px-6 py-4 text-sm">{ticket.assigned_to}</td>

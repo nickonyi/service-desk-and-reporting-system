@@ -13,6 +13,7 @@ export const useTickets = () => {
 
 export const TicketsProvider = ({ children }) => {
   const [tickets, setTickets] = useState([]);
+  console.log(tickets);
 
   const addTicket = (ticketData) => {
     const newTicket = {

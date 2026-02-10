@@ -29,8 +29,8 @@ function NewTicketForm() {
   const statuses = [
     { name: 'Open' },
     { name: 'In progess' },
-    { name: 'Awating user' },
-    { name: 'Awating vendor' },
+    { name: 'Awaiting user' },
+    { name: 'Awaiting vendor' },
     { name: 'Closed' },
   ];
 
