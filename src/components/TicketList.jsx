@@ -10,184 +10,21 @@ function TicketList() {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const { tickets } = useTickets();
 
-  const [filteredTickets, setFilteredTickets] = useState([
-    {
-      id: 1,
-      ticket_number: 'TCK-1023',
-      title: 'Cannot connect to office WiFi',
-      requester_name: 'John Doe',
-      created_at: '2026-02-05T09:24:00Z',
-      categories: {
-        id: 3,
-        name: 'Network',
-        color: '#3B82F6', // blue
-      },
+  const filteredTickets = tickets.filter((ticket) => {
+    const matchesSearch =
+      ticket.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ticket.description.toLowerCase().includes(searchQuery.toLowerCase());
 
-      priorities: {
-        id: 3,
-        name: 'High',
-        color: '#F97316', // orange
-      },
+    const matchesCategory = !selectedCategory || ticket.category_id === selectedCategory;
+    const matchesLocation = !selectedLocation || ticket.location === selectedLocation;
+    const matchesStatus = !selectedStatus || ticket.status === selectedStatus;
 
-      statuses: {
-        id: 1,
-        name: 'Open',
-        color: '#6B7280', // gray
-      },
-    },
-    {
-      id: 2,
-      ticket_number: 'TCK-1024',
-      title: 'Outlook email not syncing',
-      requester_name: 'Jane Smith',
-      created_at: '2026-02-04T14:10:00Z',
+    return matchesSearch && matchesCategory && matchesLocation && matchesStatus;
+  });
 
-      categories: {
-        id: 5,
-        name: 'Email',
-        color: '#6366F1', // indigo
-      },
-
-      priorities: {
-        id: 2,
-        name: 'Medium',
-        color: '#EAB308', // yellow
-      },
-
-      statuses: {
-        id: 2,
-        name: 'In Progress',
-        color: '#3B82F6', // blue
-      },
-    },
-    {
-      id: 3,
-      ticket_number: 'TCK-1025',
-      title: 'Laptop overheating and shutting down',
-      requester_name: 'Michael Brown',
-      created_at: '2026-02-03T08:45:00Z',
-
-      categories: {
-        id: 1,
-        name: 'Hardware',
-        color: '#10B981', // green
-      },
-
-      priorities: {
-        id: 4,
-        name: 'Critical',
-        color: '#EF4444', // red
-      },
-
-      statuses: {
-        id: 3,
-        name: 'Pending',
-        color: '#F59E0B', // amber
-      },
-    },
-    {
-      id: 3,
-      ticket_number: 'TCK-1025',
-      title: 'Laptop overheating and shutting down',
-      requester_name: 'Michael Brown',
-      created_at: '2026-02-03T08:45:00Z',
-
-      categories: {
-        id: 1,
-        name: 'Hardware',
-        color: '#10B981', // green
-      },
-
-      priorities: {
-        id: 4,
-        name: 'Critical',
-        color: '#EF4444', // red
-      },
-
-      statuses: {
-        id: 3,
-        name: 'Pending',
-        color: '#F59E0B', // amber
-      },
-    },
-    {
-      id: 3,
-      ticket_number: 'TCK-1025',
-      title: 'Laptop overheating and shutting down',
-      requester_name: 'Michael Brown',
-      created_at: '2026-02-03T08:45:00Z',
-
-      categories: {
-        id: 1,
-        name: 'Hardware',
-        color: '#10B981', // green
-      },
-
-      priorities: {
-        id: 4,
-        name: 'Critical',
-        color: '#EF4444', // red
-      },
-
-      statuses: {
-        id: 3,
-        name: 'Pending',
-        color: '#F59E0B', // amber
-      },
-    },
-    {
-      id: 3,
-      ticket_number: 'TCK-1025',
-      title: 'Laptop overheating and shutting down',
-      requester_name: 'Michael Brown',
-      created_at: '2026-02-03T08:45:00Z',
-
-      categories: {
-        id: 1,
-        name: 'Hardware',
-        color: '#10B981', // green
-      },
-
-      priorities: {
-        id: 4,
-        name: 'Critical',
-        color: '#EF4444', // red
-      },
-
-      statuses: {
-        id: 3,
-        name: 'Pending',
-        color: '#F59E0B', // amber
-      },
-    },
-    {
-      id: 3,
-      ticket_number: 'TCK-1025',
-      title: 'Laptop overheating and shutting down',
-      requester_name: 'Michael Brown',
-      created_at: '2026-02-03T08:45:00Z',
-
-      categories: {
-        id: 1,
-        name: 'Hardware',
-        color: '#10B981', // green
-      },
-
-      priorities: {
-        id: 4,
-        name: 'Critical',
-        color: '#EF4444', // red
-      },
-
-      statuses: {
-        id: 3,
-        name: 'Pending',
-        color: '#F59E0B', // amber
-      },
-    },
-  ]);
   const categories = [
     { id: 1, name: 'Hardware' },
     { id: 2, name: 'Software' },
@@ -198,18 +35,19 @@ function TicketList() {
   ];
 
   const statuses = [
-    { id: 1, name: 'Open', color: 'gray' },
-    { id: 2, name: 'In Progress', color: 'blue' },
-    { id: 3, name: 'Pending', color: 'yellow' },
-    { id: 4, name: 'Resolved', color: 'green' },
-    { id: 5, name: 'Closed', color: 'red' },
+    { id: 1, name: 'Open' },
+    { id: 2, name: 'In progress' },
+    { id: 3, name: 'Awaiting user' },
+    { id: 4, name: 'Awaiting vendor' },
+    { id: 5, name: 'Closed' },
   ];
 
-  const priorities = [
-    { id: 1, name: 'Low', level: 1, color: 'green' },
-    { id: 2, name: 'Medium', level: 2, color: 'yellow' },
-    { id: 3, name: 'High', level: 3, color: 'orange' },
-    { id: 4, name: 'Critical', level: 4, color: 'red' },
+  const locations = [
+    { id: 1, name: 'Bugolobi', code: 'NBO' },
+    { id: 2, name: 'Acacia', code: 'MBA' },
+    { id: 3, name: 'The Hub', code: 'KSM' },
+    { id: 4, name: 'Sarit', code: 'NKU' },
+    { id: 5, name: 'Yaya', code: 'NKU' },
   ];
 
   const getStatusColors = (status) => {
@@ -257,6 +95,8 @@ function TicketList() {
                 type="text"
                 placeholder="Search tickets..."
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
@@ -268,21 +108,21 @@ function TicketList() {
               >
                 <option value="">All Categories</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
+                  <option key={cat.id} value={cat.name}>
                     {cat.name}
                   </option>
                 ))}
               </select>
 
               <select
-                value={selectedPriority}
-                onChange={(e) => setSelectedPriority(e.target.value)}
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">All Locations</option>
-                {priorities.map((priority) => (
-                  <option key={priority.id} value={priority.id}>
-                    {priority.name}
+                {locations.map((location) => (
+                  <option key={location.id} value={location.name}>
+                    {location.name}
                   </option>
                 ))}
               </select>
@@ -294,7 +134,7 @@ function TicketList() {
               >
                 <option value="">All Statuses</option>
                 {statuses.map((status) => (
-                  <option key={status.id} value={status.id}>
+                  <option key={status.id} value={status.name}>
                     {status.name}
                   </option>
                 ))}
@@ -304,7 +144,7 @@ function TicketList() {
         </div>
 
         <div className="bg-white mt-8 rounded-lg shadow  overflow-hidden">
-          {tickets.length === 0 ? (
+          {filteredTickets.length === 0 ? (
             <div className="text-center py-10 text-gray-500">
               <Filter size={48} className="mx-auto mb-4 opacity-50" />
               <p className="text-gray-500">No tickets found.</p>
@@ -325,7 +165,7 @@ function TicketList() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {tickets.map((ticket) => (
+                  {filteredTickets.map((ticket) => (
                     <tr
                       key={ticket.id}
                       onClick={() => setSelectedTicket(ticket)}
@@ -359,7 +199,11 @@ function TicketList() {
         </div>
       </div>
       {selectedTicket && (
-        <TicketDetails ticket={selectedTicket} onClose={() => setSelectedTicket(null)} />
+        <TicketDetails
+          ticket={selectedTicket}
+          onClose={() => setSelectedTicket(null)}
+          statuses={statuses}
+        />
       )}
     </div>
   );

@@ -1,14 +1,6 @@
 import { User, X, Clock } from 'lucide-react';
 
-function TicketDetails({ ticket, onClose }) {
-  const statuses = [
-    { id: 1, name: 'Open', color: 'gray' },
-    { id: 2, name: 'In Progress', color: 'blue' },
-    { id: 3, name: 'Awaiting user', color: 'yellow' },
-    { id: 4, name: 'Awaiting vendor', color: 'green' },
-    { id: 5, name: 'Resolved', color: 'red' },
-  ];
-
+function TicketDetails({ ticket, onClose, statuses }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">

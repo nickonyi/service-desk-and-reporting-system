@@ -1,5 +1,4 @@
-// context/TicketsContext.jsx
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const TicketsContext = createContext();
 
@@ -12,12 +11,19 @@ export const useTickets = () => {
 };
 
 export const TicketsProvider = ({ children }) => {
-  const [tickets, setTickets] = useState([]);
+  const [tickets, setTickets] = useState(() => {
+    const storedTickets = localStorage.getItem('tickets');
+    return storedTickets ? JSON.parse(storedTickets) : [];
+  });
   console.log(tickets);
+
+  useEffect(() => {
+    localStorage.setItem('tickets', JSON.stringify(tickets));
+  }, [tickets]);
 
   const addTicket = (ticketData) => {
     const newTicket = {
-      id: Date.now(), // Simple ID generation for frontend
+      id: Date.now(),
       ...ticketData,
       created_at: new Date().toISOString(),
     };

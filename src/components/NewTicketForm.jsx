@@ -18,40 +18,44 @@ function NewTicketForm() {
     assigned_to: '',
   });
 
-  // Sample data - replace with your actual data
+  // Updated data with IDs
   const categories = [
-    { name: 'Hardware' },
-    { name: 'Software' },
-    { name: 'Network' },
-    { name: 'Database' },
+    { id: 1, name: 'Hardware' },
+    { id: 2, name: 'Software' },
+    { id: 3, name: 'Network' },
+    { id: 4, name: 'Database' },
   ];
 
   const statuses = [
-    { name: 'Open' },
-    { name: 'In progess' },
-    { name: 'Awaiting user' },
-    { name: 'Awaiting vendor' },
-    { name: 'Closed' },
+    { id: 1, name: 'Open' },
+    { id: 2, name: 'In progress' },
+    { id: 3, name: 'Awaiting user' },
+    { id: 4, name: 'Awaiting vendor' },
+    { id: 5, name: 'Closed' },
   ];
 
   const siteVisitOptions = [
-    { id: 'remote', name: 'remote' },
-    { id: 'onsite', name: 'onsite' },
+    { id: 1, name: 'Remote' },
+    { id: 2, name: 'Onsite' },
   ];
 
   const locations = [
-    { name: 'Bugolobi' },
-    { name: 'Acacia' },
-    { name: 'The Hub' },
-    { name: 'Yaya' },
-    { name: 'sarit' },
+    { id: 1, name: 'Bugolobi' },
+    { id: 2, name: 'Acacia' },
+    { id: 3, name: 'The Hub' },
+    { id: 4, name: 'Yaya' },
+    { id: 5, name: 'Sarit' },
   ];
 
-  const technicians = [{ name: 'Tier 1' }, { name: 'Tier 2' }, { name: 'Tier 3' }];
+  const technicians = [
+    { id: 1, name: 'Tier 1' },
+    { id: 2, name: 'Tier 2' },
+    { id: 3, name: 'Tier 3' },
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simple validation
     if (!formData.title || !formData.description || !formData.category_id) {
       alert('Please fill in all required fields');
       return;
@@ -59,20 +63,12 @@ function NewTicketForm() {
 
     setLoading(true);
 
-    // Simulate API delay
     setTimeout(() => {
-      const newTicket = addTicket(formData);
+      addTicket(formData);
       setLoading(false);
-
-      // Redirect to tickets list
       navigate('/dashboard/tickets');
-
-      // Or if you want to go to the specific ticket detail page:
-      // navigate(`/tickets/${newTicket.id}`);
     }, 500);
   };
-
-  const onClose = () => {};
 
   return (
     <div className="border-b border-gray-200 flex flex-col gap-4 flex-2 bg-white">
@@ -117,7 +113,7 @@ function NewTicketForm() {
               >
                 <option value="">Select category</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
+                  <option key={cat.id} value={cat.name}>
                     {cat.name}
                   </option>
                 ))}
@@ -127,14 +123,14 @@ function NewTicketForm() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status *</label>
               <select
-                value={formData.priority_id}
+                value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Select status</option>
                 {statuses.map((status) => (
-                  <option key={status.id} value={status.id}>
+                  <option key={status.id} value={status.name}>
                     {status.name}
                   </option>
                 ))}
@@ -170,7 +166,7 @@ function NewTicketForm() {
               >
                 <option value="">Select location</option>
                 {locations.map((loc) => (
-                  <option key={loc.id} value={loc.id}>
+                  <option key={loc.id} value={loc.name}>
                     {loc.name}
                   </option>
                 ))}
@@ -197,7 +193,7 @@ function NewTicketForm() {
               >
                 <option value="">Select technician</option>
                 {technicians.map((tech) => (
-                  <option key={tech.id} value={tech.id}>
+                  <option key={tech.id} value={tech.name}>
                     {tech.name}
                   </option>
                 ))}
