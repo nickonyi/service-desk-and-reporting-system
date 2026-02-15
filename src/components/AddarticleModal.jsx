@@ -1,4 +1,10 @@
+import { useNavigate } from 'react-router';
+
 export default function AddArticle() {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const navigate = useNavigate();
+  const { addArticle } = useArticles();
   return (
     <div className="min-h-screen bg-white text-gray-800 flex-2 ">
       <div className="border-b border-gray-200 p-2">
