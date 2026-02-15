@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { tableHeaders } from '../data.js';
 import { useNavigate } from 'react-router';
 import { useTickets } from '../context/TicketsContext.jsx';
+import TicketDetails from './TicketDetails.jsx';
 
 function TicketList() {
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedPriority, setSelectedPriority] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const { tickets } = useTickets();
-  console.log(tickets);
 
   const [filteredTickets, setFilteredTickets] = useState([
     {
@@ -212,8 +213,6 @@ function TicketList() {
   ];
 
   const getStatusColors = (status) => {
-    console.log(status);
-
     switch (status.toLowerCase()) {
       case 'open':
         return 'text-green-800';
@@ -280,7 +279,7 @@ function TicketList() {
                 onChange={(e) => setSelectedPriority(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="">All Priorities</option>
+                <option value="">All Locations</option>
                 {priorities.map((priority) => (
                   <option key={priority.id} value={priority.id}>
                     {priority.name}
@@ -329,10 +328,10 @@ function TicketList() {
                   {tickets.map((ticket) => (
                     <tr
                       key={ticket.id}
-                      onClick={() => navigate(`/tickets/${ticket.id}`)}
+                      onClick={() => setSelectedTicket(ticket)}
                       className="hover:bg-gray-50 cursor-pointer"
                     >
-                      <td className="px-6 py-4 text-sm text-gray-900">#{ticket.sku}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">WW-{ticket.sku}</td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.title}
                       </td>
@@ -359,6 +358,9 @@ function TicketList() {
           )}
         </div>
       </div>
+      {selectedTicket && (
+        <TicketDetails ticket={selectedTicket} onClose={() => setSelectedTicket(null)} />
+      )}
     </div>
   );
 }
