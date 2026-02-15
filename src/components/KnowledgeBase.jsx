@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 
 const KnowledgeBase = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const navigate = useNavigate();
   const categories = [
@@ -48,8 +47,8 @@ const KnowledgeBase = () => {
     const matchesSearch =
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+
+    return matchesSearch;
   });
 
   return (

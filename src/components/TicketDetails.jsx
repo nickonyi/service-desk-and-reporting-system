@@ -1,6 +1,23 @@
 import { User, X, Clock } from 'lucide-react';
+import { useState } from 'react';
+import { useTickets } from '../context/TicketsContext';
 
 function TicketDetails({ ticket, onClose, statuses }) {
+  const { updateTicket } = useTickets();
+  const [selectedStatus, setSelectedStatus] = useState(ticket.status);
+
+  const handleStatusChange = (newStatus) => {
+    setSelectedStatus(newStatus);
+    const updates = { status: newStatus };
+
+    if (newStatus.toLowerCase() === 'closed') {
+      updates.closed_at = new Date().toISOString();
+    } else {
+      updates.closed_at = null;
+    }
+    updateTicket(ticket.id, updates);
+    onClose();
+  };
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -24,9 +41,11 @@ function TicketDetails({ ticket, onClose, statuses }) {
                 <select
                   name=""
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
+                  value={selectedStatus}
+                  onChange={(e) => handleStatusChange(e.target.value)}
                 >
                   {statuses.map((status) => (
-                    <option key={status.id} value={status.id}>
+                    <option key={status.id} value={status.name}>
                       {status.name}
                     </option>
                   ))}
@@ -43,9 +62,18 @@ function TicketDetails({ ticket, onClose, statuses }) {
                 <Clock size={16} className="text-gray-400" />
                 <span className="text-gray-700">Created:</span>
                 <span className="font-medium text-gray-900">
-                  {new Date(ticket.created_at).toLocaleDateString()}
+                  {new Date(ticket.created_at).toLocaleString()}
                 </span>
               </div>
+              {ticket.closed_at && (
+                <div className="flex items-center gap-2 text-sm mt-2">
+                  <Clock size={16} className="text-gray-400" />
+                  <span className="text-gray-700">Closed on:</span>
+                  <span className="font-medium text-gray-900">
+                    {new Date(ticket.closed_at).toLocaleString()}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <div className="border-t border-grey-500 pt-6">
