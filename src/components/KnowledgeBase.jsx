@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Search, Plus, X, Calendar, User, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useArticles } from '../context/ArticlesContext';
+import DashboardHeader from './DashboardHeader';
+import { article } from 'framer-motion/client';
 
 const KnowledgeBase = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedArticle, setSelectedArticle] = useState('');
   const { articles, incrementViews } = useArticles();
   const navigate = useNavigate();
 
@@ -19,26 +20,13 @@ const KnowledgeBase = () => {
 
   const openArticle = (article) => {
     incrementViews(article.id);
-    setSelectedArticle(article);
+    navigate(`/dashboard/knowledge/${article.id}`);
   };
   return (
-    <div className="min-h-screen bg-gray-50 ">
+    <div className="min-h-screen bg-white ">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8 border-b border-gray-200 p-2">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <h1 className="text-3xl font-bold text-gray-900">Knowledge Base</h1>
-            </div>
-            <button
-              className="flex items-center gap-2 bg-black cursor-pointer text-white px-4 py-2 rounded-lg  shadow-sm"
-              onClick={() => navigate('add')}
-            >
-              <Plus className="w-5 h-5" />
-              Add Article
-            </button>
-          </div>
-        </div>
+        <DashboardHeader title="Knowledge base" btnText="Add article" />
 
         <div className="p-6">
           {/* Search Bar */}
@@ -93,22 +81,6 @@ const KnowledgeBase = () => {
             </div>
           )}
         </div>
-        {selectedArticle && (
-          <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">{selectedArticle.title}</h2>
-                <button
-                  onClick={() => setSelectedArticle(null)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-              <p className="text-gray-700 whitespace-pre-wrap">{selectedArticle.content}</p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

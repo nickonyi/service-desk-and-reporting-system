@@ -7,6 +7,7 @@ import AddArticle from '../components/AddarticleModal';
 import Dashboard from '../layouts/Dashboard';
 import NewTicketForm from '../components/NewTicketForm';
 import TicketList from '../components/TicketList';
+import ArticleDetails from '../pages/ArticleDetails';
 
 export const router = createBrowserRouter([
   {
@@ -26,8 +27,12 @@ export const router = createBrowserRouter([
             element: <KnowledgeBase />,
           },
           {
-            path: 'knowledge/add',
+            path: 'knowledge/new',
             element: <AddArticle />,
+          },
+          {
+            path: 'knowledge/:articleId',
+            element: <ArticleDetails />,
           },
           {
             path: 'tickets',
