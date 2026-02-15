@@ -1,47 +1,13 @@
 import { useState } from 'react';
-import { Search, Plus, BookOpen, Calendar, User, Eye } from 'lucide-react';
+import { Search, Plus, X, Calendar, User, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import { useArticles } from '../context/ArticlesContext';
 
 const KnowledgeBase = () => {
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [selectedArticle, setSelectedArticle] = useState('');
+  const { articles, incrementViews } = useArticles();
   const navigate = useNavigate();
-  const categories = [
-    { id: 'all', name: 'All Articles', count: 24 },
-    { id: 'getting-started', name: 'Getting Started', count: 8 },
-    { id: 'features', name: 'Features', count: 12 },
-    { id: 'troubleshooting', name: 'Troubleshooting', count: 4 },
-  ];
-
-  const articles = [
-    {
-      id: 1,
-      title: 'Getting Started with Your Application',
-      excerpt: 'Learn the basics of setting up and using the application for the first time.',
-      category: 'getting-started',
-      author: 'John Doe',
-      date: '2024-02-01',
-      views: 1234,
-    },
-    {
-      id: 2,
-      title: 'Advanced Features Overview',
-      excerpt: 'Explore advanced features and capabilities to maximize your productivity.',
-      category: 'features',
-      author: 'Jane Smith',
-      date: '2024-02-05',
-      views: 856,
-    },
-    {
-      id: 3,
-      title: 'Common Issues and Solutions',
-      excerpt: 'Quick fixes for the most frequently encountered problems.',
-      category: 'troubleshooting',
-      author: 'Mike Johnson',
-      date: '2024-02-03',
-      views: 542,
-    },
-  ];
 
   const filteredArticles = articles.filter((article) => {
     const matchesSearch =
@@ -51,6 +17,10 @@ const KnowledgeBase = () => {
     return matchesSearch;
   });
 
+  const openArticle = (article) => {
+    incrementViews(article.id);
+    setSelectedArticle(article);
+  };
   return (
     <div className="min-h-screen bg-gray-50 ">
       <div className="max-w-6xl mx-auto">
@@ -90,6 +60,7 @@ const KnowledgeBase = () => {
             {filteredArticles.map((article) => (
               <div
                 key={article.id}
+                onClick={() => openArticle(article)}
                 className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
               >
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">{article.title}</h3>
@@ -122,6 +93,22 @@ const KnowledgeBase = () => {
             </div>
           )}
         </div>
+        {selectedArticle && (
+          <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">{selectedArticle.title}</h2>
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <p className="text-gray-700 whitespace-pre-wrap">{selectedArticle.content}</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

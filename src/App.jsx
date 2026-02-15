@@ -7,15 +7,13 @@ import { router } from './routes/Router.jsx';
 
 function App() {
   return (
-    <>
-      <AuthProvider>
-        <TicketsProvider>
-          <ArticlesProvider>
-            <RouterProvider router={router} />
-          </ArticlesProvider>
-        </TicketsProvider>
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <TicketsProvider>
+        <ArticlesProvider>
+          <RouterProvider router={router} />
+        </ArticlesProvider>
+      </TicketsProvider>
+    </AuthProvider>
   );
 }
 

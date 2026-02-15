@@ -23,7 +23,7 @@ export const ArticlesProvider = ({ children }) => {
 
   const addArticle = (articleData) => {
     const newArticle = {
-      id: Date().now(),
+      id: Date.now(),
       date: new Date().toISOString(),
       views: 0,
       ...articleData,
@@ -37,7 +37,7 @@ export const ArticlesProvider = ({ children }) => {
   };
 
   return (
-    <ArticleContext.Provider values={{ articles, addArticle, incrementViews }}>
+    <ArticleContext.Provider value={{ articles, addArticle, incrementViews }}>
       {children}
     </ArticleContext.Provider>
   );
