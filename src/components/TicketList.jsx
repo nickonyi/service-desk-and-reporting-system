@@ -68,12 +68,11 @@ function TicketList() {
     }
   };
 
-  const navigate = useNavigate();
   return (
     <div className="flex-1 space-y-6 bg-white">
       <DashboardHeader title="Tickets" btnText="create" />
 
-      <div className="space-y-4 px-6 ">
+      <div className="space-y-4 px-6 pb-6">
         <div className="bg-white rounded-lg shadow p-4">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1 relative">
@@ -141,7 +140,7 @@ function TicketList() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full ">
                 <thead className="bg-gray-50 border-b border-gray-50">
                   <tr>
                     {tableHeaders.map((header) => (
