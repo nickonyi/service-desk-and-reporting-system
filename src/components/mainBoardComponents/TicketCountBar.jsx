@@ -4,12 +4,10 @@ function TicketCountBar({ daysRange }) {
   const { tickets } = useTickets();
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - daysRange);
-  console.log(Array.isArray(tickets));
 
   const filteredTickets = tickets.filter((ticket) => {
     return new Date(ticket.created_at) >= cutoffDate;
   });
-  console.log(filteredTickets.filter((t) => t.status.toLowerCase() === 'awaiting user'));
 
   const totalTickets = filteredTickets.length;
   const openTickets = filteredTickets.filter((t) => t.status.toLowerCase() === 'open').length;
