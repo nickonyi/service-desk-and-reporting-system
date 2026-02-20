@@ -1,7 +1,6 @@
-import { Plus, Search, Filter, User, Clock } from 'lucide-react';
+import { Search, Filter, User, Clock } from 'lucide-react';
 import { useState } from 'react';
 import { tableHeaders } from '../data.js';
-import { useNavigate } from 'react-router';
 import { useTickets } from '../context/TicketsContext.jsx';
 import TicketDetails from './TicketDetails.jsx';
 import DashboardHeader from './DashboardHeader.jsx';

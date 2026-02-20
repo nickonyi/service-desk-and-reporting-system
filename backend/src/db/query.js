@@ -26,3 +26,56 @@ export const registerUser = async (email, password, role = 'user') => {
 
   return result.rows[0];
 };
+
+export const insertTickets = async (
+  title,
+  description,
+  categoryId,
+  statusId,
+  locationId,
+  callId,
+  assignedToId,
+  siteVisitId
+) => {
+  const query = `INSERT INTO tickets (call_id,title,description,
+  category_id,status_id,location_id,assigned_tier_id)
+  VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *
+  `;
+  const values = [
+    callId,
+    title,
+    description,
+    categoryId,
+    statusId,
+    locationId,
+    assignedToId,
+    siteVisitId,
+  ];
+  const result = await db.query(query, values);
+  return result.rows[0];
+};
+
+export const getCategories = async () => {
+  const result = await db.query('SELECT * FROM categories ORDER BY id');
+  return result.rows;
+};
+
+export const getStatuses = async () => {
+  const result = await db.query('SELECT * FROM statuses ORDER BY id');
+  return result.rows;
+};
+
+export const getLocations = async () => {
+  const result = await db.query('SELECT * FROM locations ORDER BY id');
+  return result.rows;
+};
+
+export const getTiers = async () => {
+  const result = await db.query('SELECT * FROM support_tiers ORDER BY id');
+  return result.rows;
+};
+
+export const getSiteVisits = async () => {
+  const result = await db.query('SELECT * FROM site_visits ORDER BY id');
+  return result.rows;
+};

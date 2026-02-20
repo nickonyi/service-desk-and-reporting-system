@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Cannot connect to Wi-Fi",
+    "description": "User reports intermittent Wi-Fi connectivity at the office.",
+    "category": "Network",
+    "status": "Open",
+    "location": "Bugolobi",
+    "assigned_tier": "Tier 1",
+    "call_id": "1234567"
+  },
+  {
+    "title": "Laptop not booting",
+    "description": "Laptop stuck on BIOS screen after update.",
+    "category": "Hardware",
+    "status": "In progress",
+    "location": "Acacia",
+    "assigned_tier": "Tier 2",
+    "call_id": "1234568"
+  },
+  {
+    "title": "Email not syncing",
+    "description": "Corporate email not syncing on mobile devices.",
+    "category": "Email",
+    "status": "Awaiting user",
+    "location": "The Hub",
+    "assigned_tier": "Tier 1",
+    "call_id": "1234569"
+  },
+  {
+    "title": "Access denied to shared folder",
+    "description": "User cannot access shared drive folder for project documents.",
+    "category": "Access / Permissions",
+    "status": "Open",
+    "location": "Sarit",
+    "assigned_tier": "Tier 1",
+    "call_id": "1234570"
+  },
+  {
+    "title": "Software installation request",
+    "description": "User requests installation of Adobe Photoshop.",
+    "category": "Software",
+    "status": "Closed",
+    "location": "Yaya",
+    "assigned_tier": "Tier 2",
+    "call_id": "1234571"
+  }
+]

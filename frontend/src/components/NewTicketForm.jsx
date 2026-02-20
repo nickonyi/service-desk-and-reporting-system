@@ -6,7 +6,6 @@ function NewTicketForm() {
   const navigate = useNavigate();
   const { addTicket } = useTickets();
   const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -14,44 +13,9 @@ function NewTicketForm() {
     status: '',
     site_visit: '',
     location: '',
-    sku: '',
+    call_id: '',
     assigned_to: '',
   });
-
-  // Updated data with IDs
-  const categories = [
-    { id: 1, name: 'Hardware' },
-    { id: 2, name: 'Software' },
-    { id: 3, name: 'Network' },
-    { id: 4, name: 'Database' },
-  ];
-
-  const statuses = [
-    { id: 1, name: 'Open' },
-    { id: 2, name: 'In progress' },
-    { id: 3, name: 'Awaiting user' },
-    { id: 4, name: 'Awaiting vendor' },
-    { id: 5, name: 'Closed' },
-  ];
-
-  const siteVisitOptions = [
-    { id: 1, name: 'Remote' },
-    { id: 2, name: 'Onsite' },
-  ];
-
-  const locations = [
-    { id: 1, name: 'Bugolobi' },
-    { id: 2, name: 'Acacia' },
-    { id: 3, name: 'The Hub' },
-    { id: 4, name: 'Yaya' },
-    { id: 5, name: 'Sarit' },
-  ];
-
-  const technicians = [
-    { id: 1, name: 'Tier 1' },
-    { id: 2, name: 'Tier 2' },
-    { id: 3, name: 'Tier 3' },
-  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -174,13 +138,14 @@ function NewTicketForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Call ID</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Call ID *</label>
               <input
                 type="text"
-                value={formData.sku}
-                onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                value={formData.call_id}
+                onChange={(e) => setFormData({ ...formData, call_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="60078..."
+                placeholder="42338..."
+                required
               />
             </div>
 

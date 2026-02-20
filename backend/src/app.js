@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/authRouter.js';
+import ticketRoutes from './routes/ticketRouter.js';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(
 );
 
 app.use('/api/auth', authRoutes);
+app.use('/api/tickets', ticketRoutes);
 
 app.use(errorHandler);
 app.listen(PORT, () => {
