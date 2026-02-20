@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch --env-file=.env ./src/app.js"
+    "dev": "node --watch --env-file=.env ./src/app.js",
+    "reset-db": "psql -d postgres -c \"DROP DATABASE IF EXISTS service_desk\" && psql -d postgres -c \"CREATE DATABASE service_desk\""
   },
   "keywords": [],
   "author": "",
