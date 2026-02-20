@@ -9,13 +9,13 @@ function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(username, password);
-    if (success) {
+    const result = await login(username, password);
+    if (result.success) {
       navigate('/dashboard');
     } else {
-      setError('Invalid credetials');
+      setError(result.message);
     }
   };
 
