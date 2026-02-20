@@ -4,17 +4,18 @@ import { useTickets } from '../context/TicketsContext';
 
 function NewTicketForm() {
   const navigate = useNavigate();
-  const { addTicket } = useTickets();
-  const [loading, setLoading] = useState(false);
+
+  const { addTicket, categories, statuses, locations, technicians, siteVisitOptions, loading } =
+    useTickets();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category_id: '',
-    status: '',
-    site_visit: '',
-    location: '',
+    status_id: '',
+    site_visit_id: '',
+    location_id: '',
     call_id: '',
-    assigned_to: '',
+    assigned_tier_id: '',
   });
 
   const handleSubmit = async (e) => {
@@ -25,13 +26,13 @@ function NewTicketForm() {
       return;
     }
 
-    setLoading(true);
-
-    setTimeout(() => {
-      addTicket(formData);
-      setLoading(false);
+    try {
+      await addTicket(formData);
       navigate('/dashboard/tickets');
-    }, 500);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to create ticket: ' + error.message);
+    }
   };
 
   return (
@@ -77,7 +78,7 @@ function NewTicketForm() {
               >
                 <option value="">Select category</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.name}>
+                  <option key={cat.id} value={cat.id}>
                     {cat.name}
                   </option>
                 ))}
@@ -87,14 +88,14 @@ function NewTicketForm() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Status *</label>
               <select
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                value={formData.status_id}
+                onChange={(e) => setFormData({ ...formData, status_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Select status</option>
                 {statuses.map((status) => (
-                  <option key={status.id} value={status.name}>
+                  <option key={status.id} value={status.id}>
                     {status.name}
                   </option>
                 ))}
@@ -104,8 +105,8 @@ function NewTicketForm() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Site visit *</label>
               <select
-                value={formData.site_visit}
-                onChange={(e) => setFormData({ ...formData, site_visit: e.target.value })}
+                value={formData.site_visit_id}
+                onChange={(e) => setFormData({ ...formData, site_visit_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
@@ -123,14 +124,14 @@ function NewTicketForm() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
               <select
-                value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                value={formData.location_id}
+                onChange={(e) => setFormData({ ...formData, location_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 <option value="">Select location</option>
                 {locations.map((loc) => (
-                  <option key={loc.id} value={loc.name}>
+                  <option key={loc.id} value={loc.id}>
                     {loc.name}
                   </option>
                 ))}
@@ -152,13 +153,13 @@ function NewTicketForm() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Assigned to</label>
               <select
-                value={formData.assigned_to}
-                onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
+                value={formData.assigned_tier_id}
+                onChange={(e) => setFormData({ ...formData, assigned_tier_id: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Select technician</option>
                 {technicians.map((tech) => (
-                  <option key={tech.id} value={tech.name}>
+                  <option key={tech.id} value={tech.id}>
                     {tech.name}
                   </option>
                 ))}

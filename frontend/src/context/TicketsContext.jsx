@@ -1,3 +1,4 @@
+// TicketsContext.jsx
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const TicketsContext = createContext();
@@ -11,38 +12,115 @@ export const useTickets = () => {
 };
 
 export const TicketsProvider = ({ children }) => {
-  const [tickets, setTickets] = useState(() => {
-    const storedTickets = localStorage.getItem('tickets');
-    return storedTickets ? JSON.parse(storedTickets) : [];
-  });
-  console.log(tickets);
+  const [tickets, setTickets] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
+  const [siteVisitOptions, setSiteVisitOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('tickets', JSON.stringify(tickets));
-  }, [tickets]);
+    const fetchData = async () => {
+      try {
+        const [catRes, statusRes, locRes, tierRes, siteRes, ticketsRes] = await Promise.all([
+          fetch('http://localhost:3000/api/tickets/categories').then((r) => r.json()),
+          fetch('http://localhost:3000/api/tickets/statuses').then((r) => r.json()),
+          fetch('http://localhost:3000/api/tickets/locations').then((r) => r.json()),
+          fetch('http://localhost:3000/api/tickets/tiers').then((r) => r.json()),
+          fetch('http://localhost:3000/api/tickets/site_visits').then((r) => r.json()),
+          fetch('http://localhost:3000/api/tickets').then((r) => r.json()),
+        ]);
 
-  const addTicket = (ticketData) => {
-    const newTicket = {
-      id: Date.now(),
-      ...ticketData,
-      created_at: new Date().toISOString(),
+        setCategories(catRes.data);
+        setStatuses(statusRes.data);
+        setLocations(locRes.data);
+        setTechnicians(tierRes.data);
+        setSiteVisitOptions(siteRes.data);
+        setTickets(ticketsRes.data || []);
+      } catch (err) {
+        console.error('Failed to fetch ticket data', err);
+      }
     };
-    setTickets((prev) => [newTicket, ...prev]);
-    return newTicket;
+
+    fetchData();
+  }, []);
+
+  // Add a new ticket via backend
+  const addTicket = async (ticketData) => {
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:3000/api/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ticketData),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+
+      // Update frontend state
+      setTickets((prev) => [data.data, ...prev]);
+      return data.data;
+    } catch (err) {
+      console.error('Failed to create ticket', err);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateTicket = (id, updates) => {
-    setTickets((prev) =>
-      prev.map((ticket) => (ticket.id === id ? { ...ticket, ...updates } : ticket))
-    );
+  const updateTicket = async (id, updates) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/tickets/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+
+      setTickets((prev) =>
+        prev.map((ticket) => (ticket.id === id ? { ...ticket, ...data.data } : ticket))
+      );
+    } catch (err) {
+      console.error('Failed to update ticket', err);
+      throw err;
+    }
   };
 
-  const deleteTicket = (id) => {
-    setTickets((prev) => prev.filter((ticket) => ticket.id !== id));
+  const deleteTicket = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/tickets/${id}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
+
+      setTickets((prev) => prev.filter((ticket) => ticket.id !== id));
+    } catch (err) {
+      console.error('Failed to delete ticket', err);
+      throw err;
+    }
   };
 
   return (
-    <TicketsContext.Provider value={{ tickets, addTicket, updateTicket, deleteTicket }}>
+    <TicketsContext.Provider
+      value={{
+        tickets,
+        categories,
+        statuses,
+        locations,
+        technicians,
+        siteVisitOptions,
+        loading,
+        addTicket,
+        updateTicket,
+        deleteTicket,
+      }}
+    >
       {children}
     </TicketsContext.Provider>
   );
