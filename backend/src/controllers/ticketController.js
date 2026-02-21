@@ -1,6 +1,14 @@
-import { insertTickets } from '../db/query.js';
+import { getTickets, insertTickets } from '../db/query.js';
 import { getCategories, getLocations, getStatuses, getSiteVisits, getTiers } from '../db/query.js';
 
+export const fetchTickets = async (req, res, next) => {
+  try {
+    const tickets = await getTickets();
+    res.json({ success: true, data: tickets });
+  } catch (error) {
+    next(error);
+  }
+};
 export const fetchCategories = async (req, res, next) => {
   try {
     const data = await getCategories();

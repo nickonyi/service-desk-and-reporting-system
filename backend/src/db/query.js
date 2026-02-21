@@ -38,7 +38,7 @@ export const insertTickets = async (
   siteVisitId
 ) => {
   const query = `INSERT INTO tickets (call_id,title,description,
-  category_id,status_id,location_id,assigned_tier_id)
+  category_id,status_id,location_id,assigned_tier_id,site_visit_id)
   VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *
   `;
   const values = [
@@ -78,4 +78,22 @@ export const getTiers = async () => {
 export const getSiteVisits = async () => {
   const result = await db.query('SELECT * FROM site_visits ORDER BY id');
   return result.rows;
+};
+
+export const getTickets = async () => {
+  const query = `
+  SELECT t.id,t.call_id,t.title,t.description,t.created_at,
+  c.name AS category,
+  s.name AS status,
+  l.name as location,
+  tr.name as assigned_to
+  FROM tickets t
+  JOIN categories c on t.category_id = c.id
+  JOIN statuses s on t.status_id = s.id
+  JOIN locations l on t.location_id = l.id
+  LEFT join support_tiers tr on t.assigned_tier_id = tr.id
+  ORDER BY t.created_at DESC; `;
+
+  const result = await db.query(query);
+  return result.rows[0];
 };

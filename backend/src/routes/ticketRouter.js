@@ -6,10 +6,12 @@ import {
   fetchLocations,
   fetchSiteVisits,
   fetchStatuses,
+  fetchTickets,
 } from '../controllers/ticketController.js';
 
 const ticketRoutes = Router();
 
+ticketRoutes.get('/', fetchTickets);
 ticketRoutes.get('/categories', fetchCategories);
 ticketRoutes.get('/statuses', fetchStatuses);
 ticketRoutes.get('/locations', fetchLocations);

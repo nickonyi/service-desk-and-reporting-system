@@ -23,21 +23,22 @@ export const TicketsProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [catRes, statusRes, locRes, tierRes, siteRes, ticketsRes] = await Promise.all([
+        const [ticketsRes, catRes, statusRes, locRes, tierRes, siteRes] = await Promise.all([
+          fetch('http://localhost:3000/api/tickets').then((r) => r.json()),
           fetch('http://localhost:3000/api/tickets/categories').then((r) => r.json()),
           fetch('http://localhost:3000/api/tickets/statuses').then((r) => r.json()),
           fetch('http://localhost:3000/api/tickets/locations').then((r) => r.json()),
           fetch('http://localhost:3000/api/tickets/tiers').then((r) => r.json()),
           fetch('http://localhost:3000/api/tickets/site_visits').then((r) => r.json()),
-          fetch('http://localhost:3000/api/tickets').then((r) => r.json()),
+          ,
         ]);
 
+        setTickets(ticketsRes.data || []);
         setCategories(catRes.data);
         setStatuses(statusRes.data);
         setLocations(locRes.data);
         setTechnicians(tierRes.data);
         setSiteVisitOptions(siteRes.data);
-        setTickets(ticketsRes.data || []);
       } catch (err) {
         console.error('Failed to fetch ticket data', err);
       }
@@ -59,7 +60,6 @@ export const TicketsProvider = ({ children }) => {
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      // Update frontend state
       setTickets((prev) => [data.data, ...prev]);
       return data.data;
     } catch (err) {
