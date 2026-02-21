@@ -70,7 +70,7 @@ export const TicketsProvider = ({ children }) => {
     }
   };
 
-  const updateTicket = async (id, updates) => {
+  const updateTicket = async (id, updates, localUpdates = updates) => {
     try {
       const res = await fetch(`http://localhost:3000/api/tickets/${id}`, {
         method: 'PUT',
@@ -82,7 +82,9 @@ export const TicketsProvider = ({ children }) => {
       if (!data.success) throw new Error(data.message);
 
       setTickets((prev) =>
-        prev.map((ticket) => (ticket.id === id ? { ...ticket, ...data.data } : ticket))
+        prev.map((ticket) =>
+          ticket.id === id ? { ...ticket, ...localUpdates, ...data.data } : ticket
+        )
       );
     } catch (err) {
       console.error('Failed to update ticket', err);

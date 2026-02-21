@@ -1,4 +1,4 @@
-import { getTickets, insertTickets } from '../db/query.js';
+import { deleteTicketbyId, getTickets, insertTickets, updateTicketbyId } from '../db/query.js';
 import { getCategories, getLocations, getStatuses, getSiteVisits, getTiers } from '../db/query.js';
 
 export const fetchTickets = async (req, res, next) => {
@@ -78,6 +78,47 @@ export const createTicket = async (req, res, next) => {
       site_visit_id
     );
     res.json({ success: true, data: newTicket });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTicket = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const updates = req.body;
+
+    const updatedTicket = await updateTicketbyId(id, updates);
+    if (!updatedTicket) {
+      return res.status(404).json({
+        success: false,
+        message: 'Ticket not found',
+      });
+    }
+
+    res.json({ success: true, data: updatedTicket });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTicket = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const deleted = await deleteTicketbyId(id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: 'Ticket not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Ticket deleted successfully',
+    });
   } catch (error) {
     next(error);
   }

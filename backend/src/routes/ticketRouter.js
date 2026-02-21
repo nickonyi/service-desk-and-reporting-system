@@ -7,6 +7,8 @@ import {
   fetchSiteVisits,
   fetchStatuses,
   fetchTickets,
+  updateTicket,
+  deleteTicket,
 } from '../controllers/ticketController.js';
 
 const ticketRoutes = Router();
@@ -19,5 +21,6 @@ ticketRoutes.get('/tiers', fetchTiers);
 ticketRoutes.get('/site_visits', fetchSiteVisits);
 
 ticketRoutes.post('/', createTicket);
-
+ticketRoutes.put('/:id', updateTicket);
+ticketRoutes.delete('/:id', deleteTicket);
 export default ticketRoutes;

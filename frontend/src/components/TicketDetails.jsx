@@ -4,19 +4,33 @@ import { useTickets } from '../context/TicketsContext';
 
 function TicketDetails({ ticket, onClose, statuses }) {
   const { updateTicket } = useTickets();
-  const [selectedStatus, setSelectedStatus] = useState(ticket.status);
+  const initialStatusId =
+    statuses.find((s) => s.name.toLowerCase() === ticket.status.toLowerCase())?.id ?? null;
+  const [selectedStatusId, setSelectedStatusId] = useState(initialStatusId);
+  console.log(selectedStatusId);
 
-  const handleStatusChange = (newStatus) => {
-    setSelectedStatus(newStatus);
-    const updates = { status: newStatus };
+  const handleStatusChange = async (e) => {
+    const newStatusId = Number(e.target.value);
+    setSelectedStatusId(newStatusId);
+    const selectedStatus = statuses.find((status) => status.id === newStatusId);
 
-    if (newStatus.toLowerCase() === 'closed') {
-      updates.closed_at = new Date().toISOString();
-    } else {
-      updates.closed_at = null;
+    const apiUpdates = {
+      status_id: newStatusId,
+
+      closed_at:
+        selectedStatus?.name.toLowerCase() === 'resolved' ? new Date().toISOString() : null,
+    };
+
+    const localUpdates = {
+      ...apiUpdates,
+      status: selectedStatus?.name,
+    };
+    try {
+      await updateTicket(ticket.id, apiUpdates, localUpdates);
+      onClose();
+    } catch (error) {
+      console.log('Failed to update the ticket', error);
     }
-    updateTicket(ticket.id, updates);
-    onClose();
   };
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
@@ -41,11 +55,11 @@ function TicketDetails({ ticket, onClose, statuses }) {
                 <select
                   name=""
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
-                  value={selectedStatus}
-                  onChange={(e) => handleStatusChange(e.target.value)}
+                  value={selectedStatusId}
+                  onChange={handleStatusChange}
                 >
                   {statuses.map((status) => (
-                    <option key={status.id} value={status.name}>
+                    <option key={status.id} value={status.id}>
                       {status.name}
                     </option>
                   ))}

@@ -11,59 +11,34 @@ function TicketList() {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const { tickets } = useTickets();
+  const { tickets, categories, statuses, locations } = useTickets();
 
   const filteredTickets = tickets.filter((ticket) => {
     const matchesSearch =
-      ticket.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ticket.description.toLowerCase().includes(searchQuery.toLowerCase());
+      ticket.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ticket.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory = !selectedCategory || ticket.category_id === selectedCategory;
+    const matchesCategory = !selectedCategory || ticket.category === selectedCategory;
     const matchesLocation = !selectedLocation || ticket.location === selectedLocation;
     const matchesStatus = !selectedStatus || ticket.status === selectedStatus;
 
     return matchesSearch && matchesCategory && matchesLocation && matchesStatus;
   });
 
-  const categories = [
-    { id: 1, name: 'Hardware' },
-    { id: 2, name: 'Software' },
-    { id: 3, name: 'Network' },
-    { id: 4, name: 'Access / Permissions' },
-    { id: 5, name: 'Email' },
-    { id: 6, name: 'Other' },
-  ];
-
-  const statuses = [
-    { id: 1, name: 'Open' },
-    { id: 2, name: 'In progress' },
-    { id: 3, name: 'Awaiting user' },
-    { id: 4, name: 'Awaiting vendor' },
-    { id: 5, name: 'Closed' },
-  ];
-
-  const locations = [
-    { id: 1, name: 'Bugolobi', code: 'NBO' },
-    { id: 2, name: 'Acacia', code: 'MBA' },
-    { id: 3, name: 'The Hub', code: 'KSM' },
-    { id: 4, name: 'Sarit', code: 'NKU' },
-    { id: 5, name: 'Yaya', code: 'NKU' },
-  ];
-
-  const getStatusColors = (status) => {
+  const getStatusColors = (status = '') => {
     switch (status.toLowerCase()) {
       case 'open':
         return 'text-green-800';
       case 'in progress':
         return 'text-yellow-800';
-      case 'resolved':
-        return 'text-blue-800';
       case 'awaiting user':
-        return 'text-emarald-700';
+        return 'text-emerald-700';
       case 'awaiting vendor':
         return 'text-cyan-700';
+      case 'closed':
+        return 'text-gray-500';
       default:
-        return ' text-gray-600';
+        return 'text-gray-600';
     }
   };
 
@@ -159,12 +134,12 @@ function TicketList() {
                       onClick={() => setSelectedTicket(ticket)}
                       className="hover:bg-gray-50 cursor-pointer"
                     >
-                      <td className="px-6 py-4 text-sm text-gray-900">WW-{ticket.sku}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">WW-{ticket.call_id}</td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.title}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                        {ticket.category_id}
+                        {ticket.category}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.location}
@@ -172,7 +147,9 @@ function TicketList() {
                       <td
                         className={`px-6 py-4 text-sm font-medium text-gray-900 ${getStatusColors(ticket.status)}`}
                       >
-                        {ticket.status}
+                        <span className="px-2 py-1 bg-gray-300 text-xs font-medium rounded-full">
+                          {ticket.status}
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-sm">{ticket.assigned_to}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">

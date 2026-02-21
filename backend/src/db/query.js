@@ -95,5 +95,33 @@ export const getTickets = async () => {
   ORDER BY t.created_at DESC; `;
 
   const result = await db.query(query);
+  return result.rows;
+};
+
+export const updateTicketbyId = async (id, upates) => {
+  const fields = [];
+  const values = [];
+  let index = 1;
+
+  for (const [key, value] of Object.entries(upates)) {
+    fields.push(`${key}=$${index}`);
+    values.push(value);
+    index++;
+  }
+
+  values.push(id);
+
+  const query = `
+  UPDATE tickets SET ${fields.join(',')}, updated_at = NOW()
+  WHERE id = $${index}
+  RETURNING *
+  `;
+
+  const result = await db.query(query, values);
   return result.rows[0];
+};
+
+export const deleteTicketbyId = async (id) => {
+  const result = await db.query(`DELETE FROM tickets WHERE id=$1`, [id]);
+  return result.rowCount > 0;
 };
