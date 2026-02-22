@@ -178,7 +178,7 @@ function NewTicketForm() {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
+              className="px-4 py-2 bg-black cursor-pointer text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Create Ticket'}
             </button>

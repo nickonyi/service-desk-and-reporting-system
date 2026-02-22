@@ -3,11 +3,10 @@ import { useState } from 'react';
 import { useTickets } from '../context/TicketsContext';
 
 function TicketDetails({ ticket, onClose, statuses }) {
-  const { updateTicket } = useTickets();
+  const { updateTicket, deleteTicket } = useTickets();
   const initialStatusId =
     statuses.find((s) => s.name.toLowerCase() === ticket.status.toLowerCase())?.id ?? null;
   const [selectedStatusId, setSelectedStatusId] = useState(initialStatusId);
-  console.log(selectedStatusId);
 
   const handleStatusChange = async (e) => {
     const newStatusId = Number(e.target.value);
@@ -32,12 +31,27 @@ function TicketDetails({ ticket, onClose, statuses }) {
       console.log('Failed to update the ticket', error);
     }
   };
+
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this ticket? This action cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteTicket(ticket.id);
+      onClose();
+    } catch (err) {
+      console.error('Failed to delete ticket', err);
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">WW-{ticket.sku}</h2>
+            <h2 className="text-xl font-semibold text-gray-900">WW-{ticket.call_id}</h2>
             <p className="text-sm text-gray-600">{ticket.title}</p>
           </div>
           <button
@@ -50,8 +64,7 @@ function TicketDetails({ ticket, onClose, statuses }) {
         <div className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">status</label>
+              <div className="flex gap-2">
                 <select
                   name=""
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent"
@@ -64,6 +77,13 @@ function TicketDetails({ ticket, onClose, statuses }) {
                     </option>
                   ))}
                 </select>
+
+                <button
+                  onClick={handleDelete}
+                  className="bg-red-500 px-4 py-2 cursor-pointer text-white font-medium rounded-lg hover:text-white text-sm font-medium"
+                >
+                  Delete
+                </button>
               </div>
             </div>
             <div className="space-y-4">

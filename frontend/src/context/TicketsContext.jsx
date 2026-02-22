@@ -59,6 +59,7 @@ export const TicketsProvider = ({ children }) => {
 
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
+      console.log(data.data);
 
       setTickets((prev) => [data.data, ...prev]);
       return data.data;
