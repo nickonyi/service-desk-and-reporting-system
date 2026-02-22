@@ -156,3 +156,19 @@ export const getArticleById = async (id) => {
   );
   return result.rows[0];
 };
+
+export const getTicketsByCountry = async (days) => {
+  const query = `
+      SELECT
+        c.name AS country,
+        COUNT(*) AS ticket_count
+      FROM tickets t
+      JOIN locations l ON t.location_id = l.id
+      JOIN countries c ON l.country_id = c.id
+      WHERE t.created_at >= NOW() - ($1 || ' days')::interval
+      GROUP BY c.name
+      ORDER BY ticket_count DESC;
+    `;
+  const result = await db.query(query, [days]);
+  return result.rows;
+};

@@ -4,6 +4,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import authRouter from './routes/authRoutes.js';
 import ticketRouter from './routes/ticketRoutes.js';
 import articleRouter from './routes/articlesRoutes.js';
+import kpiRouter from './routes/KPIRoutes.js';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(
 app.use('/api/auth', authRouter);
 app.use('/api/tickets', ticketRouter);
 app.use('/api/articles', articleRouter);
+app.use('/api/kpi', kpiRouter);
 
 app.use(errorHandler);
 app.listen(PORT, () => {
