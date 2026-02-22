@@ -3,7 +3,6 @@ import { NavLink } from 'react-router';
 
 function NavBar() {
   const menuItems = [
-    { label: 'Search', icon: Search, path: '/search' },
     { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
     { label: 'Tickets', icon: Ticket, path: '/dashboard/tickets' },
     { label: 'Knowledge Base', icon: BookOpen, path: '/dashboard/knowledge' },

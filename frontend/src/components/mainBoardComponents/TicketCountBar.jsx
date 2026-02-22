@@ -16,7 +16,7 @@ function TicketCountBar({ daysRange }) {
     return status === 'in progress' || status === 'awaiting user' || status === 'awaiting vendor';
   }).length;
 
-  const closedTickets = filteredTickets.filter((t) => t.status.toLowerCase() === 'closed').length;
+  const closedTickets = filteredTickets.filter((t) => t.status.toLowerCase() === 'resolved').length;
 
   return (
     <div className="grid grid-cols-1 p-6 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -26,6 +26,8 @@ function TicketCountBar({ daysRange }) {
         { label: 'In progress Tickets', value: inProgressTickets },
         { label: 'Closed Tickets', value: closedTickets },
         { label: 'Avg. Resolution', value: '0 / 5' },
+        { label: 'Incident escalation rate', value: '20%' },
+        { label: 'Incident recurrence rate', value: '30%' },
       ].map((card) => (
         <div
           key={card.label}
