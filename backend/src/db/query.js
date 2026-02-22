@@ -125,3 +125,34 @@ export const deleteTicketbyId = async (id) => {
   const result = await db.query(`DELETE FROM tickets WHERE id=$1`, [id]);
   return result.rowCount > 0;
 };
+
+export const getAllArtcicles = async () => {
+  const result = await db.query(`
+    SELECT id,title,excerpt,content,author,created_at FROM articles
+    ORDER BY created_at DESC
+    `);
+  return result.rows;
+};
+
+export const createArticle = async (title, excerpt, content, author) => {
+  const result = await db.query(
+    `INSERT into articles(title,excerpt,content,author)
+    VALUES($1,$2,$3,$4)
+    RETURNING id, title, excerpt, content, author, created_at
+    `,
+    [title, excerpt, content, author]
+  );
+
+  return result.rows[0];
+};
+
+export const getArticleById = async (id) => {
+  const result = await db.query(
+    `
+    SELECT id,title,excerpt,content,author,created_at FROM articles
+    WHERE id = $1
+    `,
+    [id]
+  );
+  return result.rows[0];
+};
