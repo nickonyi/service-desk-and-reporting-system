@@ -2,6 +2,7 @@ import ChartPlaceholder from '../mainBoardComponents/ChartPlaceholder';
 import DonutPlaceholder from '../mainBoardComponents/DonutPlaceholder';
 import FilterBar from '../mainBoardComponents/FilterBar';
 import TicketCountBar from '../mainBoardComponents/TicketCountBar';
+import TicketsByCountryDonut from '../mainBoardComponents/TicketsByCountryDonut';
 import { useState } from 'react';
 
 function MainBoard() {
@@ -16,7 +17,7 @@ function MainBoard() {
       <TicketCountBar daysRange={daysRange} />
 
       <div className="grid px-6 grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChartPlaceholder title="Ticket Trend" />
+        <TicketsByCountryDonut daysRange={daysRange} />
         <ChartPlaceholder title="Feedback Trend" />
       </div>
       <div className="grid px-6 pb-6 grid-cols-1 md:grid-cols-2 gap-6">
