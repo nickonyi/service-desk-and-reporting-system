@@ -12,33 +12,54 @@ export const useArticles = () => {
 };
 
 export const ArticlesProvider = ({ children }) => {
-  const [articles, setArticles] = useState(() => {
-    const stored = localStorage.getItem('articles');
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem('articles', JSON.stringify(articles));
-  }, [articles]);
+    const fetchArtices = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch('/api/articles');
+        const json = await res.json();
 
-  const addArticle = (articleData) => {
-    const newArticle = {
-      id: Date.now(),
-      date: new Date().toISOString(),
-      views: 0,
-      ...articleData,
+        if (!res.ok) {
+          throw new Error(json.message || 'Failed to fetch articles');
+        }
+        console.log(json.data);
+
+        setArticles(json.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     };
-    setArticles((prev) => [newArticle, ...prev]);
-    return newArticle;
-  };
+    fetchArtices();
+  }, []);
 
-  const incrementViews = (id) => {
-    setArticles((prev) => prev.map((a) => (a.id === id ? { ...a, views: a.views + 1 } : a)));
+  const addArticle = async (articleData) => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(articleData),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Article was not added');
+      }
+      setArticles((prev) => [data.data, ...prev]);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <ArticleContext.Provider value={{ articles, addArticle, incrementViews }}>
-      {children}
-    </ArticleContext.Provider>
+    <ArticleContext.Provider value={{ articles, addArticle }}>{children}</ArticleContext.Provider>
   );
 };

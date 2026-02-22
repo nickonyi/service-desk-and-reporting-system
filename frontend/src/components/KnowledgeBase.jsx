@@ -3,11 +3,10 @@ import { Search, Plus, X, Calendar, User, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useArticles } from '../context/ArticlesContext';
 import DashboardHeader from './DashboardHeader';
-import { article } from 'framer-motion/client';
 
 const KnowledgeBase = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { articles, incrementViews } = useArticles();
+  const { articles } = useArticles();
   const navigate = useNavigate();
 
   const filteredArticles = articles.filter((article) => {
@@ -19,7 +18,6 @@ const KnowledgeBase = () => {
   });
 
   const openArticle = (article) => {
-    incrementViews(article.id);
     navigate(`/dashboard/knowledge/${article.id}`);
   };
   return (
@@ -62,12 +60,8 @@ const KnowledgeBase = () => {
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      <span>{article.date}</span>
+                      <span>{new Date(article.created_at).toLocaleString()}</span>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Eye className="w-3 h-3" />
-                    <span>{article.views}</span>
                   </div>
                 </div>
               </div>
