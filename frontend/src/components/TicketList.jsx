@@ -12,6 +12,7 @@ function TicketList() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { tickets, categories, statuses, locations } = useTickets();
+  console.log(tickets);
 
   const filteredTickets = tickets.filter((ticket) => {
     const matchesSearch =
@@ -134,7 +135,7 @@ function TicketList() {
                       onClick={() => setSelectedTicket(ticket)}
                       className="hover:bg-gray-50 cursor-pointer"
                     >
-                      <td className="px-6 py-4 text-sm text-gray-900">WW-{ticket.call_id}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">{ticket.call_id}</td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.title}
                       </td>
@@ -155,6 +156,7 @@ function TicketList() {
                       <td className="px-6 py-4 text-sm text-gray-600">
                         {new Date(ticket.created_at).toLocaleDateString()}
                       </td>
+                      <td className="px-6 py-4 text-sm">{ticket.site_visit_type}</td>
                     </tr>
                   ))}
                 </tbody>

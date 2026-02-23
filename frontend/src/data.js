@@ -6,4 +6,5 @@ export const tableHeaders = [
   'Status',
   'Assigned',
   'Created',
+  'State',
 ];

@@ -82,17 +82,24 @@ export const getSiteVisits = async () => {
 
 export const getTickets = async () => {
   const query = `
-  SELECT t.id,t.call_id,t.title,t.description,t.created_at,
+SELECT
+  t.id,
+  t.call_id,
+  t.title,
+  t.description,
+  t.created_at,
   c.name AS category,
   s.name AS status,
-  l.name as location,
-  tr.name as assigned_to
-  FROM tickets t
-  JOIN categories c on t.category_id = c.id
-  JOIN statuses s on t.status_id = s.id
-  JOIN locations l on t.location_id = l.id
-  LEFT join support_tiers tr on t.assigned_tier_id = tr.id
-  ORDER BY t.created_at DESC; `;
+  l.name AS location,
+  tr.name AS assigned_to,
+  sv.name AS site_visit_type  
+FROM tickets t
+JOIN categories c ON t.category_id = c.id
+JOIN statuses s ON t.status_id = s.id
+JOIN locations l ON t.location_id = l.id
+LEFT JOIN support_tiers tr ON t.assigned_tier_id = tr.id
+LEFT JOIN site_visits sv ON t.site_visit_id = sv.id  
+ORDER BY t.created_at DESC;`;
 
   const result = await db.query(query);
   return result.rows;
@@ -171,4 +178,17 @@ export const getTicketsByCountry = async (days) => {
     `;
   const result = await db.query(query, [days]);
   return result.rows;
+};
+
+export const getResolvedTicketsByVisitType = async () => {
+  const result = await db.query(`
+  SELECT
+    COUNT(CASE WHEN sv.name = 'Onsite' THEN 1 END) AS onsite_resolved,
+    COUNT(CASE WHEN sv.name = 'Remote' THEN 1 END) AS remote_resolved
+  FROM tickets t
+  JOIN statuses s ON t.status_id = s.id
+  JOIN site_visits sv ON t.site_visit_id = sv.id
+  WHERE s.name = 'Resolved';
+`);
+  return result.rows[0];
 };
