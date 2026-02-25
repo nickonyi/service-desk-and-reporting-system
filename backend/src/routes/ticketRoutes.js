@@ -9,12 +9,14 @@ import {
   fetchTickets,
   updateTicket,
   deleteTicket,
+  fetchSubCategories,
 } from '../controllers/ticketController.js';
 
 const ticketRouter = Router();
 
 ticketRouter.get('/', fetchTickets);
 ticketRouter.get('/categories', fetchCategories);
+ticketRouter.get('/sub_categories', fetchSubCategories);
 ticketRouter.get('/statuses', fetchStatuses);
 ticketRouter.get('/locations', fetchLocations);
 ticketRouter.get('/tiers', fetchTiers);

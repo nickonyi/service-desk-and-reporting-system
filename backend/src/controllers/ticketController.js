@@ -1,4 +1,10 @@
-import { deleteTicketbyId, getTickets, insertTickets, updateTicketbyId } from '../db/query.js';
+import {
+  deleteTicketbyId,
+  getSubCategories,
+  getTickets,
+  insertTickets,
+  updateTicketbyId,
+} from '../db/query.js';
 import { getCategories, getLocations, getStatuses, getSiteVisits, getTiers } from '../db/query.js';
 
 export const fetchTickets = async (req, res, next) => {
@@ -12,6 +18,15 @@ export const fetchTickets = async (req, res, next) => {
 export const fetchCategories = async (req, res, next) => {
   try {
     const data = await getCategories();
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const fetchSubCategories = async (req, res, next) => {
+  try {
+    const data = await getSubCategories();
     res.json({ success: true, data });
   } catch (err) {
     next(err);

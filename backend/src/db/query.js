@@ -60,6 +60,11 @@ export const getCategories = async () => {
   return result.rows;
 };
 
+export const getSubCategories = async () => {
+  const result = await db.query('SELECT * FROM sub_categories ORDER BY name');
+  return result.rows;
+};
+
 export const getStatuses = async () => {
   const result = await db.query('SELECT * FROM statuses ORDER BY id');
   return result.rows;

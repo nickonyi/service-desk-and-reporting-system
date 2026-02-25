@@ -5,12 +5,21 @@ import { useTickets } from '../context/TicketsContext';
 function NewTicketForm() {
   const navigate = useNavigate();
 
-  const { addTicket, categories, statuses, locations, technicians, siteVisitOptions, loading } =
-    useTickets();
+  const {
+    addTicket,
+    categories,
+    subcategories,
+    statuses,
+    locations,
+    technicians,
+    siteVisitOptions,
+    loading,
+  } = useTickets();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category_id: '',
+    sub_category_id: '',
     status_id: '',
     site_visit_id: '',
     location_id: '',
@@ -18,14 +27,23 @@ function NewTicketForm() {
     assigned_tier_id: '',
   });
 
+  const filteredSubCategories = subcategories.filter(
+    (sub) => sub.category_id === Number(formData.category_id)
+  );
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.description || !formData.category_id) {
+    if (
+      !formData.title ||
+      !formData.description ||
+      !formData.category_id ||
+      !formData.sub_category_id
+    ) {
       alert('Please fill in all required fields');
       return;
     }
-
+    const updates = { ...formData };
     try {
       await addTicket(formData);
       navigate('/dashboard/tickets');
@@ -67,12 +85,14 @@ function NewTicketForm() {
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
               <select
                 value={formData.category_id}
-                onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, category_id: e.target.value, sub_category_id: '' })
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
@@ -80,6 +100,23 @@ function NewTicketForm() {
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sub Category *</label>
+              <select
+                value={formData.sub_category_id}
+                onChange={(e) => setFormData({ ...formData, sub_category_id: e.target.value })}
+                disabled={!formData.category_id}
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select sub category</option>
+                {filteredSubCategories.map((sub) => (
+                  <option key={sub.id} value={sub.id}>
+                    {sub.name}
                   </option>
                 ))}
               </select>
