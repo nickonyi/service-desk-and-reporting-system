@@ -55,13 +55,13 @@ export const insertTickets = async (
   return result.rows[0];
 };
 
-export const getCategories = async () => {
-  const result = await db.query('SELECT * FROM categories ORDER BY id');
+export const getSubCategories = async () => {
+  const result = await db.query('SELECT * FROM sub_categories ORDER BY id');
   return result.rows;
 };
 
-export const getSubCategories = async () => {
-  const result = await db.query('SELECT * FROM sub_categories ORDER BY name');
+export const getChildCategories = async () => {
+  const result = await db.query('SELECT * FROM child_categories ORDER BY name');
   return result.rows;
 };
 

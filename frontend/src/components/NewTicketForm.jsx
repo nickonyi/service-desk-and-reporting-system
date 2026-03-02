@@ -7,8 +7,8 @@ function NewTicketForm() {
 
   const {
     addTicket,
-    categories,
     subcategories,
+    childcategories,
     statuses,
     locations,
     technicians,
@@ -27,8 +27,8 @@ function NewTicketForm() {
     assigned_tier_id: '',
   });
 
-  const filteredSubCategories = subcategories.filter(
-    (sub) => sub.category_id === Number(formData.category_id)
+  const filteredChildCategories = childcategories.filter(
+    (sub) => sub.sub_category_id === Number(formData.category_id)
   );
 
   const handleSubmit = async (e) => {
@@ -97,7 +97,7 @@ function NewTicketForm() {
                 required
               >
                 <option value="">Select category</option>
-                {categories.map((cat) => (
+                {subcategories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
                   </option>
@@ -114,7 +114,7 @@ function NewTicketForm() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Select sub category</option>
-                {filteredSubCategories.map((sub) => (
+                {filteredChildCategories.map((sub) => (
                   <option key={sub.id} value={sub.id}>
                     {sub.name}
                   </option>

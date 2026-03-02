@@ -11,8 +11,7 @@ function TicketList() {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const { tickets, categories, statuses, locations } = useTickets();
-  console.log(tickets);
+  const { tickets, subcategories, statuses, locations } = useTickets();
 
   const filteredTickets = tickets.filter((ticket) => {
     const matchesSearch =
@@ -71,7 +70,7 @@ function TicketList() {
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">All Categories</option>
-                {categories.map((cat) => (
+                {subcategories.map((cat) => (
                   <option key={cat.id} value={cat.name}>
                     {cat.name}
                   </option>

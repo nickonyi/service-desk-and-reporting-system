@@ -2,7 +2,6 @@ import { Router } from 'express';
 import {
   createTicket,
   fetchTiers,
-  fetchCategories,
   fetchLocations,
   fetchSiteVisits,
   fetchStatuses,
@@ -10,13 +9,14 @@ import {
   updateTicket,
   deleteTicket,
   fetchSubCategories,
+  fetchChildCategories,
 } from '../controllers/ticketController.js';
 
 const ticketRouter = Router();
 
 ticketRouter.get('/', fetchTickets);
-ticketRouter.get('/categories', fetchCategories);
 ticketRouter.get('/sub_categories', fetchSubCategories);
+ticketRouter.get('/child_categories', fetchChildCategories);
 ticketRouter.get('/statuses', fetchStatuses);
 ticketRouter.get('/locations', fetchLocations);
 ticketRouter.get('/tiers', fetchTiers);

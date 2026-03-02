@@ -13,8 +13,8 @@ export const useTickets = () => {
 
 export const TicketsProvider = ({ children }) => {
   const [tickets, setTickets] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [subcategories, setSubCategories] = useState([]);
+  const [childcategories, setChildCategories] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [locations, setLocations] = useState([]);
   const [technicians, setTechnicians] = useState([]);
@@ -24,11 +24,11 @@ export const TicketsProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [ticketsRes, catRes, subCatRes, statusRes, locRes, tierRes, siteRes] =
+        const [ticketsRes, subCatRes, childCatRes, statusRes, locRes, tierRes, siteRes] =
           await Promise.all([
             fetch('http://localhost:3000/api/tickets').then((r) => r.json()),
-            fetch('http://localhost:3000/api/tickets/categories').then((r) => r.json()),
             fetch('http://localhost:3000/api/tickets/sub_categories').then((r) => r.json()),
+            fetch('http://localhost:3000/api/tickets/child_categories').then((r) => r.json()),
             fetch('http://localhost:3000/api/tickets/statuses').then((r) => r.json()),
             fetch('http://localhost:3000/api/tickets/locations').then((r) => r.json()),
             fetch('http://localhost:3000/api/tickets/tiers').then((r) => r.json()),
@@ -37,8 +37,8 @@ export const TicketsProvider = ({ children }) => {
           ]);
 
         setTickets(ticketsRes.data || []);
-        setCategories(catRes.data);
         setSubCategories(subCatRes.data);
+        setChildCategories(childCatRes.data);
         setStatuses(statusRes.data);
         setLocations(locRes.data);
         setTechnicians(tierRes.data);
@@ -117,8 +117,8 @@ export const TicketsProvider = ({ children }) => {
     <TicketsContext.Provider
       value={{
         tickets,
-        categories,
         subcategories,
+        childcategories,
         statuses,
         locations,
         technicians,
