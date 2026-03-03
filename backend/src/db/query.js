@@ -30,7 +30,7 @@ export const registerUser = async (email, password, role = 'user') => {
 export const insertTickets = async (
   title,
   description,
-  categoryId,
+  childCategoryId,
   statusId,
   locationId,
   callId,
@@ -38,14 +38,14 @@ export const insertTickets = async (
   siteVisitId
 ) => {
   const query = `INSERT INTO tickets (call_id,title,description,
-  category_id,status_id,location_id,assigned_tier_id,site_visit_id)
+  child_category_id,status_id,location_id,assigned_tier_id,site_visit_id)
   VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *
   `;
   const values = [
     callId,
     title,
     description,
-    categoryId,
+    childCategoryId,
     statusId,
     locationId,
     assignedToId,
@@ -94,17 +94,22 @@ SELECT
   t.description,
   t.created_at,
   c.name AS category,
+  sc.name AS sub_category,
+  cc.name AS child_category,
   s.name AS status,
   l.name AS location,
   tr.name AS assigned_to,
-  sv.name AS site_visit_type  
+  sv.name AS site_visit_type
 FROM tickets t
-JOIN categories c ON t.category_id = c.id
+JOIN child_categories cc ON t.child_category_id = cc.id
+JOIN sub_categories sc ON cc.sub_category_id = sc.id
+JOIN categories c ON sc.category_id = c.id
 JOIN statuses s ON t.status_id = s.id
 JOIN locations l ON t.location_id = l.id
 LEFT JOIN support_tiers tr ON t.assigned_tier_id = tr.id
-LEFT JOIN site_visits sv ON t.site_visit_id = sv.id  
-ORDER BY t.created_at DESC;`;
+LEFT JOIN site_visits sv ON t.site_visit_id = sv.id
+ORDER BY t.created_at DESC;
+  `;
 
   const result = await db.query(query);
   return result.rows;

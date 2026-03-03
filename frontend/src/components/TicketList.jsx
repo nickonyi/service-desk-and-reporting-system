@@ -12,6 +12,8 @@ function TicketList() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { tickets, subcategories, statuses, locations } = useTickets();
+  console.log(tickets);
+  console.log(subcategories);
 
   const filteredTickets = tickets.filter((ticket) => {
     const matchesSearch =

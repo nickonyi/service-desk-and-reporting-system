@@ -7,6 +7,7 @@ import {
   getLocations,
   getStatuses,
   getSiteVisits,
+  getTickets,
   getTiers,
 } from '../db/query.js';
 
@@ -77,7 +78,7 @@ export const createTicket = async (req, res, next) => {
     const {
       title,
       description,
-      category_id,
+      child_category_id,
       status_id,
       location_id,
       call_id,
@@ -88,7 +89,7 @@ export const createTicket = async (req, res, next) => {
     const newTicket = await insertTickets(
       title,
       description,
-      category_id,
+      child_category_id,
       status_id,
       location_id,
       call_id,

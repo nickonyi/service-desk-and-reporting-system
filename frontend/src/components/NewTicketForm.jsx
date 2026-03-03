@@ -19,7 +19,7 @@ function NewTicketForm() {
     title: '',
     description: '',
     category_id: '',
-    sub_category_id: '',
+    child_category_id: '',
     status_id: '',
     site_visit_id: '',
     location_id: '',
@@ -38,12 +38,14 @@ function NewTicketForm() {
       !formData.title ||
       !formData.description ||
       !formData.category_id ||
-      !formData.sub_category_id
+      !formData.child_category_id
     ) {
       alert('Please fill in all required fields');
       return;
     }
     const updates = { ...formData };
+    console.log(updates);
+
     try {
       await addTicket(formData);
       navigate('/dashboard/tickets');
@@ -107,8 +109,8 @@ function NewTicketForm() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Sub Category *</label>
               <select
-                value={formData.sub_category_id}
-                onChange={(e) => setFormData({ ...formData, sub_category_id: e.target.value })}
+                value={formData.child_category_id}
+                onChange={(e) => setFormData({ ...formData, child_category_id: e.target.value })}
                 disabled={!formData.category_id}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
