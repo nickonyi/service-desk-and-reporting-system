@@ -64,7 +64,19 @@ export const TicketsProvider = ({ children }) => {
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      setTickets((prev) => [data.data, ...prev]);
+      const child = childcategories.find((c) => c.id === data.data.child_category_id);
+      const subCategory = subcategories.find((s) => s.id === child?.sub_category_id);
+
+      const ticket = {
+        ...data.data,
+        category: subCategory?.name,
+        status: statuses.find((s) => s.id === data.data?.status_id)?.name || '',
+        location: locations.find((l) => l.id === data.data?.location_id)?.name || '',
+        assigned_to: technicians.find((t) => t.id === data.data.assigned_tier_id)?.name || '',
+        site_visit_type: siteVisitOptions.find((s) => s.id === data.data.site_visit_id)?.name || '',
+      };
+
+      setTickets((prev) => [ticket, ...prev]);
       return data.data;
     } catch (err) {
       console.error('Failed to create ticket', err);

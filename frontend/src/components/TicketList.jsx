@@ -12,15 +12,13 @@ function TicketList() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { tickets, subcategories, statuses, locations } = useTickets();
-  console.log(tickets);
-  console.log(subcategories);
 
   const filteredTickets = tickets.filter((ticket) => {
     const matchesSearch =
       ticket.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ticket.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory = !selectedCategory || ticket.category === selectedCategory;
+    const matchesCategory = !selectedCategory || ticket.sub_category === selectedCategory;
     const matchesLocation = !selectedLocation || ticket.location === selectedLocation;
     const matchesStatus = !selectedStatus || ticket.status === selectedStatus;
 
@@ -141,7 +139,7 @@ function TicketList() {
                         {ticket.title}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                        {ticket.category}
+                        {ticket.sub_category}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.location}
