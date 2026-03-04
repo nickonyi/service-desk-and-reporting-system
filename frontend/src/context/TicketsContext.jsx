@@ -69,7 +69,7 @@ export const TicketsProvider = ({ children }) => {
 
       const ticket = {
         ...data.data,
-        category: subCategory?.name,
+        sub_category: subCategory?.name,
         status: statuses.find((s) => s.id === data.data?.status_id)?.name || '',
         location: locations.find((l) => l.id === data.data?.location_id)?.name || '',
         assigned_to: technicians.find((t) => t.id === data.data.assigned_tier_id)?.name || '',
