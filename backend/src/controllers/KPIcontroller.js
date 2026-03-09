@@ -11,8 +11,9 @@ export const fetchTicketByCountry = async (req, res, next) => {
 };
 
 export const fetchResolvedTicketsByVisitType = async (req, res, next) => {
+  const days = req.query.days;
   try {
-    const ticketsResolvedByVisit = await getResolvedTicketsByVisitType();
+    const ticketsResolvedByVisit = await getResolvedTicketsByVisitType(days);
 
     res.status(200).json({
       success: true,

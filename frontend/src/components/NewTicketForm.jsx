@@ -31,6 +31,9 @@ function NewTicketForm() {
     (child) => child.sub_category_id === Number(formData.sub_category_id)
   );
 
+  const resolvedStatus = statuses.find((s) => s.name.toLowerCase() === 'resolved');
+  console.log(resolvedStatus);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -45,7 +48,12 @@ function NewTicketForm() {
     }
 
     try {
-      await addTicket(formData);
+      const payLoad = {
+        ...formData,
+        closed_at:
+          formData.status_id === String(resolvedStatus?.id) ? new Date().toISOString() : null,
+      };
+      await addTicket(payLoad);
       navigate('/dashboard/tickets');
     } catch (error) {
       console.error(error);

@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const COLORS = {
-  onsite: '#6366f1', // indigo
-  remote: '#22c55e', // green
+  onsite: '#6366f1',
+  remote: '#22c55e',
 };
 
-function TicketsResolvedByVisitDonut() {
+function TicketsResolvedByVisitDonut({ daysRange }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -15,7 +15,7 @@ function TicketsResolvedByVisitDonut() {
       try {
         setLoading(true);
 
-        const res = await fetch('/api/kpi/resolved-summary');
+        const res = await fetch(`/api/kpi/resolved-summary?days=${daysRange}`);
         const json = await res.json();
 
         const formatted = [
@@ -40,7 +40,7 @@ function TicketsResolvedByVisitDonut() {
     };
 
     fetchResolvedTickets();
-  }, []);
+  }, [daysRange]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-4 py-6 h-72">

@@ -84,9 +84,8 @@ export const createTicket = async (req, res, next) => {
       call_id,
       assigned_tier_id,
       site_visit_id,
+      closed_at,
     } = req.body;
-
-    console.log(typeof child_category_id);
 
     const newTicket = await insertTickets(
       title,
@@ -96,7 +95,8 @@ export const createTicket = async (req, res, next) => {
       location_id,
       call_id,
       assigned_tier_id,
-      site_visit_id
+      site_visit_id,
+      closed_at
     );
 
     res.json({ success: true, data: newTicket });

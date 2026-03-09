@@ -35,11 +35,12 @@ export const insertTickets = async (
   locationId,
   callId,
   assignedToId,
-  siteVisitId
+  siteVisitId,
+  closed_at
 ) => {
   const query = `INSERT INTO tickets (call_id,title,description,
-  child_category_id,status_id,location_id,assigned_tier_id,site_visit_id)
-  VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *
+  child_category_id,status_id,location_id,assigned_tier_id,site_visit_id,closed_at)
+  VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *
   `;
   const values = [
     callId,
@@ -50,6 +51,7 @@ export const insertTickets = async (
     locationId,
     assignedToId,
     siteVisitId,
+    closed_at,
   ];
   const result = await db.query(query, values);
 
@@ -191,15 +193,19 @@ export const getTicketsByCountry = async (days) => {
   return result.rows;
 };
 
-export const getResolvedTicketsByVisitType = async () => {
-  const result = await db.query(`
+export const getResolvedTicketsByVisitType = async (days) => {
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(endDate.getDate() - days);
+  const query = `
   SELECT
     COUNT(CASE WHEN sv.name = 'Onsite' THEN 1 END) AS onsite_resolved,
     COUNT(CASE WHEN sv.name = 'Remote' THEN 1 END) AS remote_resolved
   FROM tickets t
   JOIN statuses s ON t.status_id = s.id
   JOIN site_visits sv ON t.site_visit_id = sv.id
-  WHERE s.name = 'Resolved';
-`);
+  WHERE s.name = 'Resolved' AND t.closed_at BETWEEN $1 AND $2;
+`;
+  const result = await db.query(query, [startDate, endDate]);
   return result.rows[0];
 };
