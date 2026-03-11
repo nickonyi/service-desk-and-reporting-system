@@ -1,4 +1,8 @@
-import { getResolvedTicketsByVisitType, getTicketsByCountry } from '../db/query.js';
+import {
+  getResolvedTicketsByVisitType,
+  getTicketsByCountry,
+  getTicketsCountByCategory,
+} from '../db/query.js';
 
 export const fetchTicketByCountry = async (req, res, next) => {
   try {
@@ -18,6 +22,18 @@ export const fetchResolvedTicketsByVisitType = async (req, res, next) => {
     res.status(200).json({
       success: true,
       data: ticketsResolvedByVisit,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const fetchTicketsCountByCategory = async (req, res, next) => {
+  try {
+    const ticketCountByCategory = await getTicketsCountByCategory();
+    res.json({
+      success: true,
+      data: ticketCountByCategory,
     });
   } catch (error) {
     next(error);

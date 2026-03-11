@@ -209,3 +209,17 @@ export const getResolvedTicketsByVisitType = async (days) => {
   const result = await db.query(query, [startDate, endDate]);
   return result.rows[0];
 };
+
+export const getTicketsCountByCategory = async () => {
+  const query = `SELECT 
+COUNT (CASE WHEN c.name = 'EUC' THEN 1 END ) as euc,
+COUNT (CASE WHEN c.name = 'Application' THEN 1 END ) as Application,
+COUNT (CASE WHEN c.name = 'Networking' THEN 1 END ) as Networking
+FROM tickets t
+JOIN child_categories cc ON t.child_category_id = cc.id
+JOIN sub_categories sc ON cc.sub_category_id = sc.id
+JOIN categories c ON sc.category_id = c.id `;
+
+  const result = await db.query(query);
+  return result.rows[0];
+};
