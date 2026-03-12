@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
@@ -15,15 +15,29 @@ const TIME_RANGES = [
 
 function DateRangeDropdown() {
   const [open, setOpen] = useState(false);
-  const { range, setRange, customDates, setCustomDates } = useDateRange();
+  const { range, setRange, customDates, setCustomDates, startDate, endDate } = useDateRange();
+
+  const dropdownRef = useRef(null);
 
   const selected =
     range === 'custom' && customDates?.startDate && customDates?.endDate
       ? `${customDates.startDate.toLocaleDateString()} → ${customDates.endDate.toLocaleDateString()}`
       : TIME_RANGES.find((r) => r.value === range)?.label || 'Last 30 Days';
 
+  useEffect(() => {
+    const handleClickOutsideEvent = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutsideEvent);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutsideEvent);
+    };
+  }, [dropdownRef]);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-12 cursor-pointer border border-gray-200 px-4 py-2 rounded-lg text-sm hover:bg-gray-50"
@@ -43,7 +57,9 @@ function DateRangeDropdown() {
                 onClick={() => {
                   setRange(r.value);
 
-                  if (r.value !== 'custom') {
+                  if (r.value === 'custom') {
+                    setCustomDates({ startDate: null, endDate: null });
+                  } else {
                     setOpen(false);
                   }
                 }}
@@ -58,16 +74,17 @@ function DateRangeDropdown() {
             <div className="border-t p-3 flex flex-col gap-3">
               <DayPicker
                 mode="range"
-                selected={{
-                  from: customDates.startDate,
-                  to: customDates.endDate,
-                }}
-                onSelect={(range) =>
-                  setCustomDates({
-                    startDate: range?.from || null,
-                    endDate: range?.to || null,
-                  })
+                selected={
+                  customDates.startDate
+                    ? { from: customDates.startDate, to: customDates.endDate }
+                    : undefined
                 }
+                onSelect={(range) => {
+                  setCustomDates({
+                    startDate: range?.from ?? null,
+                    endDate: range?.to ?? null,
+                  });
+                }}
               />
 
               <div className="flex justify-between text-sm text-gray-600">
@@ -81,15 +98,14 @@ function DateRangeDropdown() {
                   {customDates.endDate ? customDates.endDate.toLocaleDateString() : 'End'}
                 </span>
               </div>
-
               <button
                 onClick={() => {
-                  onApplyCustom();
                   setOpen(false);
                 }}
-                className="bg-indigo-600 text-white text-sm py-1.5 rounded hover:bg-indigo-700"
+                className="bg-indigo-600 cursor-pointer text-white text-sm py-1.5 rounded hover:bg-indigo-700"
               >
-                Apply
+                {' '}
+                Apply{' '}
               </button>
             </div>
           )}

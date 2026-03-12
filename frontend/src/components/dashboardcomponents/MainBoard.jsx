@@ -19,12 +19,7 @@ function MainBoard() {
       <div className="border-b p-6 border-gray-200">
         <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
       </div>
-      <FilterBar
-        daysRange={daysRange}
-        setDaysRange={setDaysRange}
-        customDates={customDates}
-        setCustomDates={setCustomDates}
-      />
+      <FilterBar />
       <TicketCountBar daysRange={daysRange} />
 
       <div className="grid px-6 grid-cols-1 lg:grid-cols-2 gap-6">

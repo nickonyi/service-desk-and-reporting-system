@@ -10,8 +10,23 @@ export function DateRangeProvider({ children }) {
     startDate: null,
     endDate: null,
   });
+
+  const today = new Date();
+  let startDate;
+  let endDate = today;
+
+  if (range === 'custom') {
+    startDate = customDates.startDate;
+    endDate = customDates.endDate;
+  } else {
+    startDate = new Date();
+    startDate.setDate(today.getDate() - range);
+  }
+
   return (
-    <DateRangeContext.Provider value={{ range, setRange, customDates, setCustomDates }}>
+    <DateRangeContext.Provider
+      value={{ range, setRange, customDates, setCustomDates, startDate, endDate }}
+    >
       {children}
     </DateRangeContext.Provider>
   );
