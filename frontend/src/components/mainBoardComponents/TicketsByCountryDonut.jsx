@@ -1,15 +1,27 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useDateRange } from '../../context/DateRangeContext';
 
-function TicketsByCountryDonut({ daysRange }) {
+function TicketsByCountryDonut() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { range, startDate, endDate } = useDateRange();
 
   useEffect(() => {
     const fetchTickets = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/kpi/tickets-by-country?days=${daysRange}`);
+        let url = '';
+
+        if (range === 'custom') {
+          if (!startDate || !endDate) return;
+          const start = startDate.toIsoString().split('T')[0];
+          const end = endDate.toIsoString().split('T')[0];
+          url = `/api/kpi/tickets-by-country?startDate=${start}&endDate=${end}`;
+        } else {
+          url = `/api/kpi/tickets-by-country?days=${range}`;
+        }
+        const res = await fetch(url);
         const json = await res.json();
         const formatted = json.data.map((item) => ({
           name: item.country,
@@ -25,7 +37,7 @@ function TicketsByCountryDonut({ daysRange }) {
     };
 
     fetchTickets();
-  }, [daysRange]);
+  }, [range]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-4 py-6 h-72">

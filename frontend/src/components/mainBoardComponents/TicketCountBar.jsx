@@ -1,12 +1,17 @@
+import { useDateRange } from '../../context/DateRangeContext';
 import { useTickets } from '../../context/TicketsContext';
 
-function TicketCountBar({ daysRange }) {
+function TicketCountBar() {
   const { tickets } = useTickets();
-  const cutoffDate = new Date();
-  cutoffDate.setDate(cutoffDate.getDate() - daysRange);
+  const { startDate, endDate } = useDateRange();
 
   const filteredTickets = tickets.filter((ticket) => {
-    return new Date(ticket.created_at) >= cutoffDate;
+    const created = new Date(ticket.created_at);
+
+    if (!startDate || !endDate) {
+      return true;
+    }
+    return created >= startDate && created <= endDate;
   });
 
   const totalTickets = filteredTickets.length;

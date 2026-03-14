@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useDateRange } from '../../context/DateRangeContext';
 
 const COLORS = {
   onsite: '#6366f1',
   remote: '#22c55e',
 };
 
-function TicketsResolvedByVisitDonut({ daysRange }) {
+function TicketsResolvedByVisitDonut() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { range } = useDateRange();
 
   useEffect(() => {
     const fetchResolvedTickets = async () => {
       try {
         setLoading(true);
 
-        const res = await fetch(`/api/kpi/resolved-summary?days=${daysRange}`);
+        const res = await fetch(`/api/kpi/resolved-summary?days=${range}`);
         const json = await res.json();
 
         const formatted = [
@@ -40,7 +42,7 @@ function TicketsResolvedByVisitDonut({ daysRange }) {
     };
 
     fetchResolvedTickets();
-  }, [daysRange]);
+  }, [range]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-4 py-6 h-72">

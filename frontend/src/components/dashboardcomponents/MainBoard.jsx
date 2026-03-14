@@ -20,11 +20,11 @@ function MainBoard() {
         <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
       </div>
       <FilterBar />
-      <TicketCountBar daysRange={daysRange} />
+      <TicketCountBar />
 
       <div className="grid px-6 grid-cols-1 lg:grid-cols-2 gap-6">
-        <TicketsByCountryDonut daysRange={daysRange} />
-        <TicketsResolvedByVisitDonut daysRange={daysRange} />
+        <TicketsByCountryDonut />
+        <TicketsResolvedByVisitDonut />
       </div>
       <div className="grid px-6 pb-6 grid-cols-1 md:grid-cols-2 gap-6">
         <TicketsByCategoryChart title="Tickets by Category" daysRange={daysRange} />
