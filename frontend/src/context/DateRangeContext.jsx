@@ -16,11 +16,25 @@ export function DateRangeProvider({ children }) {
   let endDate = today;
 
   if (range === 'custom') {
-    startDate = customDates.startDate;
-    endDate = customDates.endDate;
+    if (customDates.startDate) {
+      startDate = new Date(customDates.startDate);
+      startDate.setHours(0, 0, 0, 0); // start of day
+    } else {
+      startDate = null;
+    }
+
+    if (customDates.endDate) {
+      endDate = new Date(customDates.endDate);
+      endDate.setHours(23, 59, 59, 999);
+    } else {
+      endDate = null;
+    }
   } else {
     startDate = new Date();
     startDate.setDate(today.getDate() - range);
+    startDate.setHours(0, 0, 0, 0);
+    endDate = new Date();
+    endDate.setHours(23, 59, 59, 999);
   }
 
   return (

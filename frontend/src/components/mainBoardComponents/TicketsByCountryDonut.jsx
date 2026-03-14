@@ -15,14 +15,16 @@ function TicketsByCountryDonut() {
 
         if (range === 'custom') {
           if (!startDate || !endDate) return;
-          const start = startDate.toIsoString().split('T')[0];
-          const end = endDate.toIsoString().split('T')[0];
+          const start = startDate.toISOString().split('T')[0];
+          const end = endDate.toISOString().split('T')[0];
+
           url = `/api/kpi/tickets-by-country?startDate=${start}&endDate=${end}`;
         } else {
           url = `/api/kpi/tickets-by-country?days=${range}`;
         }
         const res = await fetch(url);
         const json = await res.json();
+
         const formatted = json.data.map((item) => ({
           name: item.country,
           value: Number(item.ticket_count),
@@ -37,7 +39,7 @@ function TicketsByCountryDonut() {
     };
 
     fetchTickets();
-  }, [range]);
+  }, [range, startDate, endDate]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-4 py-6 h-72">

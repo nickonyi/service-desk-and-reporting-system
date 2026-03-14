@@ -6,8 +6,10 @@ import {
 
 export const fetchTicketByCountry = async (req, res, next) => {
   try {
-    const days = req.query.days;
-    const ticketsByCountry = await getTicketsByCountry(days);
+    const { days, startDate, endDate } = req.query;
+
+    const ticketsByCountry = await getTicketsByCountry({ days, startDate, endDate });
+
     res.json({ success: true, data: ticketsByCountry });
   } catch (error) {
     next(error);
@@ -15,9 +17,16 @@ export const fetchTicketByCountry = async (req, res, next) => {
 };
 
 export const fetchResolvedTicketsByVisitType = async (req, res, next) => {
-  const days = req.query.days;
+  const { days, startDate, endDate } = req.query;
+  console.log(startDate, endDate);
+
   try {
-    const ticketsResolvedByVisit = await getResolvedTicketsByVisitType(days);
+    const ticketsResolvedByVisit = await getResolvedTicketsByVisitType({
+      days,
+      startDate,
+      endDate,
+    });
+    console.log(ticketsResolvedByVisit);
 
     res.status(200).json({
       success: true,

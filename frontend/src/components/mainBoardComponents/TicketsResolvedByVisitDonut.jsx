@@ -10,14 +10,24 @@ const COLORS = {
 function TicketsResolvedByVisitDonut() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { range } = useDateRange();
+  const { range, startDate, endDate } = useDateRange();
 
   useEffect(() => {
     const fetchResolvedTickets = async () => {
       try {
         setLoading(true);
+        let url = '';
+        if (range === 'custom') {
+          const start = startDate.toISOString().split('T')[0];
+          const end = endDate.toISOString().split('T')[0];
+          console.log(start, end);
 
-        const res = await fetch(`/api/kpi/resolved-summary?days=${range}`);
+          url = `/api/kpi/resolved-summary?startDate=${start}&endDate=${end}`;
+        } else {
+          url = `/api/kpi/resolved-summary?days=${range}`;
+        }
+
+        const res = await fetch(url);
         const json = await res.json();
 
         const formatted = [
@@ -42,7 +52,7 @@ function TicketsResolvedByVisitDonut() {
     };
 
     fetchResolvedTickets();
-  }, [range]);
+  }, [range, startDate, endDate]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-4 py-6 h-72">

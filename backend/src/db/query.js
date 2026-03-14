@@ -1,3 +1,4 @@
+import { buildDateFilter } from '../utils/dateFilter.js';
 import * as db from './pool.js';
 import bycrpt from 'bcrypt';
 
@@ -96,6 +97,7 @@ SELECT
   t.title,
   t.description,
   t.created_at,
+  t.closed_at,
   c.name AS category,
   sc.name AS sub_category,
   cc.name AS child_category,
@@ -177,7 +179,9 @@ export const getArticleById = async (id) => {
   return result.rows[0];
 };
 
-export const getTicketsByCountry = async (days) => {
+export const getTicketsByCountry = async ({ days, startDate, endDate }) => {
+  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
+
   const query = `
       SELECT
         c.name AS country,
@@ -185,28 +189,27 @@ export const getTicketsByCountry = async (days) => {
       FROM tickets t
       JOIN locations l ON t.location_id = l.id
       JOIN countries c ON l.country_id = c.id
-      WHERE t.created_at >= NOW() - ($1 || ' days')::interval
+       ${clause}
       GROUP BY c.name
       ORDER BY ticket_count DESC;
     `;
-  const result = await db.query(query, [days]);
+  const result = await db.query(query, params);
   return result.rows;
 };
 
-export const getResolvedTicketsByVisitType = async (days) => {
-  const endDate = new Date();
-  const startDate = new Date();
-  startDate.setDate(endDate.getDate() - days);
-  const query = `
-  SELECT
-    COUNT(CASE WHEN sv.name = 'Onsite' THEN 1 END) AS onsite_resolved,
-    COUNT(CASE WHEN sv.name = 'Remote' THEN 1 END) AS remote_resolved
-  FROM tickets t
-  JOIN statuses s ON t.status_id = s.id
-  JOIN site_visits sv ON t.site_visit_id = sv.id
-  WHERE s.name = 'Resolved' AND t.closed_at BETWEEN $1 AND $2;
-`;
-  const result = await db.query(query, [startDate, endDate]);
+export const getResolvedTicketsByVisitType = async ({ days, startDate, endDate }) => {
+  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.closed_at');
+  console.log(clause.length);
+
+  const query = `SELECT
+  COUNT(DISTINCT CASE WHEN sv.name = 'Onsite' THEN t.id END) AS onsite_resolved,
+  COUNT(DISTINCT CASE WHEN sv.name = 'Remote' THEN t.id END) AS remote_resolved
+FROM tickets t
+JOIN statuses s ON t.status_id = s.id
+JOIN site_visits sv ON t.site_visit_id = sv.id
+${clause.length ? clause + " AND s.name = 'Resolved'" : "WHERE s.name = 'Resolved'"};`;
+
+  const result = await db.query(query, params);
   return result.rows[0];
 };
 
