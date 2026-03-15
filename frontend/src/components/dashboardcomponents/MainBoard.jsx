@@ -8,12 +8,6 @@ import TicketsResolvedByVisitDonut from '../mainBoardComponents/TicketsResolvedB
 import { useState } from 'react';
 
 function MainBoard() {
-  const [daysRange, setDaysRange] = useState(30);
-  const [customDates, setCustomDates] = useState({
-    startDate: '',
-    endDate: '',
-  });
-
   return (
     <div className="flex-1 space-y-6 bg-white">
       <div className="border-b p-6 border-gray-200">
@@ -27,7 +21,7 @@ function MainBoard() {
         <TicketsResolvedByVisitDonut />
       </div>
       <div className="grid px-6 pb-6 grid-cols-1 md:grid-cols-2 gap-6">
-        <TicketsByCategoryDonut title="Tickets by Category" daysRange={daysRange} />
+        <TicketsByCategoryDonut title="Tickets by Category" />
         <DonutPlaceholder title="Tickets by Type" />
         <DonutPlaceholder title="Tickets by Priority" />
         <DonutPlaceholder title="Tickets by Channel" />

@@ -1,15 +1,27 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useDateRange } from '../../context/DateRangeContext';
+import { formatTimestamp } from '../../../../backend/src/utils/dateFilter';
 
 function TicketsByCategoryDonut({ title, daysRange }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { range, startDate, endDate } = useDateRange();
 
   useEffect(() => {
     const fetchTicketsByCategoryCount = async () => {
       try {
         setLoading(true);
-        const res = await fetch('/api/kpi/tickets-count-by-category');
+        let url = '';
+        if (range === 'custom') {
+          const start = formatTimestamp(startDate);
+          const end = formatTimestamp(endDate);
+
+          url = `/api/kpi/tickets-count-by-category?startDate=${start}&endDate=${end}`;
+        } else {
+          url = `/api/kpi/tickets-count-by-category?days=${range}`;
+        }
+        const res = await fetch(url);
         const json = await res.json();
 
         const formatted = [
@@ -37,7 +49,7 @@ function TicketsByCategoryDonut({ title, daysRange }) {
       }
     };
     fetchTicketsByCategoryCount();
-  }, [daysRange]);
+  }, [range, startDate, endDate]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 py-6 h-80">

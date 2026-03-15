@@ -18,7 +18,6 @@ export const fetchTicketByCountry = async (req, res, next) => {
 
 export const fetchResolvedTicketsByVisitType = async (req, res, next) => {
   const { days, startDate, endDate } = req.query;
-  console.log(startDate, endDate);
 
   try {
     const ticketsResolvedByVisit = await getResolvedTicketsByVisitType({
@@ -26,7 +25,6 @@ export const fetchResolvedTicketsByVisitType = async (req, res, next) => {
       startDate,
       endDate,
     });
-    console.log(ticketsResolvedByVisit);
 
     res.status(200).json({
       success: true,
@@ -39,7 +37,12 @@ export const fetchResolvedTicketsByVisitType = async (req, res, next) => {
 
 export const fetchTicketsCountByCategory = async (req, res, next) => {
   try {
-    const ticketCountByCategory = await getTicketsCountByCategory();
+    const { days, startDate, endDate } = req.query;
+    const ticketCountByCategory = await getTicketsCountByCategory({
+      days,
+      startDate,
+      endDate,
+    });
     res.json({
       success: true,
       data: ticketCountByCategory,

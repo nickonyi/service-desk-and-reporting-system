@@ -207,23 +207,26 @@ FROM tickets t
 JOIN statuses s ON t.status_id = s.id
 JOIN site_visits sv ON t.site_visit_id = sv.id
 ${clause.length ? clause + " AND s.name = 'Resolved'" : "WHERE s.name = 'Resolved'"};`;
-  console.log(query);
-  console.log(params);
 
   const result = await db.query(query, params);
   return result.rows[0];
 };
 
-export const getTicketsCountByCategory = async () => {
-  const query = `SELECT 
-COUNT (CASE WHEN c.name = 'EUC' THEN 1 END ) as euc,
-COUNT (CASE WHEN c.name = 'Application' THEN 1 END ) as Application,
-COUNT (CASE WHEN c.name = 'Networking' THEN 1 END ) as Networking
-FROM tickets t
-JOIN child_categories cc ON t.child_category_id = cc.id
-JOIN sub_categories sc ON cc.sub_category_id = sc.id
-JOIN categories c ON sc.category_id = c.id `;
+export const getTicketsCountByCategory = async ({ days, startDate, endDate }) => {
+  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
 
-  const result = await db.query(query);
+  const query = `
+    SELECT 
+      COUNT(CASE WHEN c.name = 'EUC' THEN 1 END) AS euc,
+      COUNT(CASE WHEN c.name = 'Application' THEN 1 END) AS application,
+      COUNT(CASE WHEN c.name = 'Networking' THEN 1 END) AS networking
+    FROM tickets t
+    JOIN child_categories cc ON t.child_category_id = cc.id
+    JOIN sub_categories sc ON cc.sub_category_id = sc.id
+    JOIN categories c ON sc.category_id = c.id
+    ${clause} 
+  `;
+
+  const result = await db.query(query, params);
   return result.rows[0];
 };
