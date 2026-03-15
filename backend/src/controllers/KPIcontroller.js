@@ -1,4 +1,5 @@
 import {
+  getEfrisTicketsByStore,
   getResolvedTicketsByVisitType,
   getTicketsByCountry,
   getTicketsCountByCategory,
@@ -46,6 +47,23 @@ export const fetchTicketsCountByCategory = async (req, res, next) => {
     res.json({
       success: true,
       data: ticketCountByCategory,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const fetchEfrisTicketsByStore = async (req, res, next) => {
+  try {
+    const { days, startDate, endDate } = req.query;
+    const efrisTicketsByStore = await getEfrisTicketsByStore({
+      days,
+      startDate,
+      endDate,
+    });
+    res.json({
+      success: true,
+      data: efrisTicketsByStore,
     });
   } catch (error) {
     next(error);

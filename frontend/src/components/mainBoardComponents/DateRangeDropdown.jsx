@@ -24,8 +24,6 @@ function DateRangeDropdown() {
       ? `${customDates.startDate.toLocaleDateString()} → ${customDates.endDate.toLocaleDateString()}`
       : TIME_RANGES.find((r) => r.value === range)?.label || 'Last 30 Days';
 
-  console.log(customDates.startDate);
-
   useEffect(() => {
     const handleClickOutsideEvent = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {

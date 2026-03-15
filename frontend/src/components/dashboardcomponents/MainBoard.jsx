@@ -1,11 +1,10 @@
-import ChartPlaceholder from '../mainBoardComponents/ChartPlaceholder';
 import DonutPlaceholder from '../mainBoardComponents/DonutPlaceholder';
 import FilterBar from '../mainBoardComponents/FilterBar';
 import TicketCountBar from '../mainBoardComponents/TicketCountBar';
 import TicketsByCategoryDonut from '../mainBoardComponents/TicketsByCategoryDonut';
-import TicketsByCountryDonut from '../mainBoardComponents/TicketsByCountryDonut';
+import TicketsByCountryBarChart from '../mainBoardComponents/TicketsByCountryBarChart';
 import TicketsResolvedByVisitDonut from '../mainBoardComponents/TicketsResolvedByVisitDonut';
-import { useState } from 'react';
+import TicketsByEfrisBarChart from '../mainBoardComponents/TicketsByEfrisBarChart';
 
 function MainBoard() {
   return (
@@ -16,13 +15,13 @@ function MainBoard() {
       <FilterBar />
       <TicketCountBar />
 
-      <div className="grid px-6 grid-cols-1 lg:grid-cols-2 gap-6">
-        <TicketsByCountryDonut />
+      <div className="grid px-8 py-12 grid-cols-1 lg:grid-cols-2 gap-6">
+        <TicketsByCategoryDonut title="Tickets by Category" />
         <TicketsResolvedByVisitDonut />
       </div>
       <div className="grid px-6 pb-6 grid-cols-1 md:grid-cols-2 gap-6">
-        <TicketsByCategoryDonut title="Tickets by Category" />
-        <DonutPlaceholder title="Tickets by Type" />
+        <TicketsByCountryBarChart title="Tickets By Country(Excluding Efris)" />
+        <TicketsByEfrisBarChart title="Efris incidents" />
         <DonutPlaceholder title="Tickets by Priority" />
         <DonutPlaceholder title="Tickets by Channel" />
       </div>

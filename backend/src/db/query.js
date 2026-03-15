@@ -230,3 +230,29 @@ export const getTicketsCountByCategory = async ({ days, startDate, endDate }) =>
   const result = await db.query(query, params);
   return result.rows[0];
 };
+
+export const getEfrisTicketsByStore = async ({ days, startDate, endDate }) => {
+  const { params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
+
+  const query = `
+    SELECT
+      l.name AS store_name,
+      COUNT(
+        CASE 
+          WHEN LOWER(cc.name) LIKE '%efris%'
+          AND t.created_at::date BETWEEN $1 AND $2
+          THEN t.id
+        END
+      ) AS efris_issues_count
+    FROM locations l
+    LEFT JOIN tickets t ON t.location_id = l.id
+    LEFT JOIN child_categories cc ON t.child_category_id = cc.id
+    WHERE l.name IN ('Acacia', 'Bugolobi', 'Naalya', 'Golf course')
+    GROUP BY l.name
+    ORDER BY l.name;
+  `;
+
+  const result = await db.query(query, params);
+
+  return result.rows;
+};

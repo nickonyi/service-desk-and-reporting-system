@@ -1,77 +1,78 @@
 import { useEffect, useState } from 'react';
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
 import { useDateRange } from '../../context/DateRangeContext';
 import { formatTimestamp } from '../../../../backend/src/utils/dateFilter';
 
-const COLORS = {
-  onsite: '#6366f1',
-  remote: '#22c55e',
-};
-
-function TicketsResolvedByVisitDonut() {
+function TicketsByCountryBarChart({ title }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const { range, startDate, endDate } = useDateRange();
 
   useEffect(() => {
-    const fetchResolvedTickets = async () => {
+    const fetchTickets = async () => {
       try {
         setLoading(true);
         let url = '';
+
         if (range === 'custom') {
+          if (!startDate || !endDate) return;
           const start = formatTimestamp(startDate);
           const end = formatTimestamp(endDate);
-
-          url = `/api/kpi/resolved-summary?startDate=${start}&endDate=${end}`;
+          url = `/api/kpi/tickets-by-country?startDate=${start}&endDate=${end}`;
         } else {
-          url = `/api/kpi/resolved-summary?days=${range}`;
+          url = `/api/kpi/tickets-by-country?days=${range}`;
         }
 
         const res = await fetch(url);
         const json = await res.json();
 
-        const formatted = [
-          {
-            name: 'Onsite',
-            value: Number(json.data.onsite_resolved),
-            color: COLORS.onsite,
-          },
-          {
-            name: 'Remote',
-            value: Number(json.data.remote_resolved),
-            color: COLORS.remote,
-          },
-        ];
+        const formatted = json.data.map((item) => ({
+          name: item.country,
+          tickets: Number(item.ticket_count),
+          color: `hsl(${Math.random() * 360}, 70%, 70%)`,
+        }));
 
         setData(formatted);
       } catch (error) {
-        console.error('Failed to fetch resolved tickets by visit:', error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchResolvedTickets();
+    fetchTickets();
   }, [range, startDate, endDate]);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 py-6 h-80">
-      <p className="text-sm text-gray-700 mb-2">Resolved Tickets (Remote vs Onsite)</p>
-
+    <div className="bg-white border border-gray-200 rounded-lg px-4 py-6 h-80">
+      <p className="text-sm text-gray-700 mb-2">{title}</p>
       <div className="h-full flex items-center justify-center">
         {loading ? (
           <p className="text-gray-400">Loading chart...</p>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie data={data} innerRadius={60} outerRadius={90} dataKey="value">
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="tickets" fill="#8884d8">
                 {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         )}
       </div>
@@ -79,4 +80,4 @@ function TicketsResolvedByVisitDonut() {
   );
 }
 
-export default TicketsResolvedByVisitDonut;
+export default TicketsByCountryBarChart;
