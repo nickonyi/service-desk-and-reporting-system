@@ -22,8 +22,6 @@ function MainBoard() {
       <div className="grid px-6 pb-6 grid-cols-1 md:grid-cols-2 gap-6">
         <TicketsByCountryBarChart title="Tickets By Country(Excluding Efris)" />
         <TicketsByEfrisBarChart title="Efris incidents" />
-        <DonutPlaceholder title="Tickets by Priority" />
-        <DonutPlaceholder title="Tickets by Channel" />
       </div>
     </div>
   );
