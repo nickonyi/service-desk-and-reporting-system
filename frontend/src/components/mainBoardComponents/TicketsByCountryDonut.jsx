@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useDateRange } from '../../context/DateRangeContext';
+import { formatTimestamp } from '../../../../backend/src/utils/dateFilter';
 
 function TicketsByCountryDonut() {
   const [data, setData] = useState([]);
@@ -15,8 +16,9 @@ function TicketsByCountryDonut() {
 
         if (range === 'custom') {
           if (!startDate || !endDate) return;
-          const start = startDate.toISOString().split('T')[0];
-          const end = endDate.toISOString().split('T')[0];
+          const start = formatTimestamp(startDate);
+          const end = formatTimestamp(endDate);
+          console.log(start, end);
 
           url = `/api/kpi/tickets-by-country?startDate=${start}&endDate=${end}`;
         } else {

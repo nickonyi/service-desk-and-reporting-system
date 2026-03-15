@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useDateRange } from '../../context/DateRangeContext';
+import { formatTimestamp } from '../../../../backend/src/utils/dateFilter';
 
 const COLORS = {
   onsite: '#6366f1',
@@ -18,9 +19,8 @@ function TicketsResolvedByVisitDonut() {
         setLoading(true);
         let url = '';
         if (range === 'custom') {
-          const start = startDate.toISOString().split('T')[0];
-          const end = endDate.toISOString().split('T')[0];
-          console.log(start, end);
+          const start = formatTimestamp(startDate);
+          const end = formatTimestamp(endDate);
 
           url = `/api/kpi/resolved-summary?startDate=${start}&endDate=${end}`;
         } else {

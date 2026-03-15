@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-function TicketsByCategoryChart({ title, daysRange }) {
+function TicketsByCategoryDonut({ title, daysRange }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -63,4 +63,4 @@ function TicketsByCategoryChart({ title, daysRange }) {
   );
 }
 
-export default TicketsByCategoryChart;
+export default TicketsByCategoryDonut;

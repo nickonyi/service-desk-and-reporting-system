@@ -24,6 +24,8 @@ function DateRangeDropdown() {
       ? `${customDates.startDate.toLocaleDateString()} → ${customDates.endDate.toLocaleDateString()}`
       : TIME_RANGES.find((r) => r.value === range)?.label || 'Last 30 Days';
 
+  console.log(customDates.startDate);
+
   useEffect(() => {
     const handleClickOutsideEvent = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -80,12 +82,9 @@ function DateRangeDropdown() {
                     : undefined
                 }
                 onSelect={(range) => {
-                  const normalizeDate = (date) =>
-                    date ? new Date(date.getFullYear(), date.getMonth(), date.getDate()) : null;
-
                   setCustomDates({
-                    startDate: normalizeDate(range?.from),
-                    endDate: normalizeDate(range?.to),
+                    startDate: range?.from,
+                    endDate: range?.to,
                   });
                 }}
               />

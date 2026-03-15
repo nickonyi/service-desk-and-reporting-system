@@ -2,7 +2,7 @@ import ChartPlaceholder from '../mainBoardComponents/ChartPlaceholder';
 import DonutPlaceholder from '../mainBoardComponents/DonutPlaceholder';
 import FilterBar from '../mainBoardComponents/FilterBar';
 import TicketCountBar from '../mainBoardComponents/TicketCountBar';
-import TicketsByCategoryChart from '../mainBoardComponents/TicketsByCategoryChart';
+import TicketsByCategoryDonut from '../mainBoardComponents/TicketsByCategoryDonut';
 import TicketsByCountryDonut from '../mainBoardComponents/TicketsByCountryDonut';
 import TicketsResolvedByVisitDonut from '../mainBoardComponents/TicketsResolvedByVisitDonut';
 import { useState } from 'react';
@@ -27,7 +27,7 @@ function MainBoard() {
         <TicketsResolvedByVisitDonut />
       </div>
       <div className="grid px-6 pb-6 grid-cols-1 md:grid-cols-2 gap-6">
-        <TicketsByCategoryChart title="Tickets by Category" daysRange={daysRange} />
+        <TicketsByCategoryDonut title="Tickets by Category" daysRange={daysRange} />
         <DonutPlaceholder title="Tickets by Type" />
         <DonutPlaceholder title="Tickets by Priority" />
         <DonutPlaceholder title="Tickets by Channel" />
