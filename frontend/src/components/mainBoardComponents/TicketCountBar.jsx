@@ -11,17 +11,9 @@ function TicketCountBar() {
     if (!startDate || !endDate) {
       return true;
     }
-    return created >= startDate && created < new Date(endDate.getTime() + 24 * 60 * 60 * 1000);
-  });
 
-  const filterClosedTickets = tickets.filter((ticket) => {
-    const closed = ticket?.closed_at ? new Date(ticket.closed_at) : null;
-
-    if (!closed) return false;
-    if (!startDate || !endDate) return true;
-    return closed >= startDate && closed < new Date(endDate.getTime() + 24 * 60 * 60 * 1000);
+    return created >= startDate && created < new Date(endDate.getTime());
   });
-  console.log(filterClosedTickets);
 
   const totalTickets = filteredTickets.length;
   const openTickets = filteredTickets.filter((t) => t.status.toLowerCase() === 'open').length;
@@ -30,9 +22,7 @@ function TicketCountBar() {
     return status === 'in progress' || status === 'awaiting user' || status === 'awaiting vendor';
   }).length;
 
-  const closedTickets = filterClosedTickets.filter(
-    (t) => t.status.toLowerCase() === 'resolved'
-  ).length;
+  const closedTickets = filteredTickets.filter((t) => t.status.toLowerCase() === 'resolved').length;
 
   return (
     <div className="grid grid-cols-1 p-6 sm:grid-cols-2 lg:grid-cols-4 gap-4">

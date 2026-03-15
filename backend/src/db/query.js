@@ -198,8 +198,7 @@ export const getTicketsByCountry = async ({ days, startDate, endDate }) => {
 };
 
 export const getResolvedTicketsByVisitType = async ({ days, startDate, endDate }) => {
-  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.closed_at');
-  console.log(clause.length);
+  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
 
   const query = `SELECT
   COUNT(DISTINCT CASE WHEN sv.name = 'Onsite' THEN t.id END) AS onsite_resolved,
@@ -208,6 +207,8 @@ FROM tickets t
 JOIN statuses s ON t.status_id = s.id
 JOIN site_visits sv ON t.site_visit_id = sv.id
 ${clause.length ? clause + " AND s.name = 'Resolved'" : "WHERE s.name = 'Resolved'"};`;
+  console.log(query);
+  console.log(params);
 
   const result = await db.query(query, params);
   return result.rows[0];

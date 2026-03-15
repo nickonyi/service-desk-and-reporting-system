@@ -18,7 +18,7 @@ export function DateRangeProvider({ children }) {
   if (range === 'custom') {
     if (customDates.startDate) {
       startDate = new Date(customDates.startDate);
-      startDate.setHours(0, 0, 0, 0); // start of day
+      startDate.setHours(0, 0, 0, 0);
     } else {
       startDate = null;
     }
@@ -31,7 +31,7 @@ export function DateRangeProvider({ children }) {
     }
   } else {
     startDate = new Date();
-    startDate.setDate(today.getDate() - range);
+    startDate.setDate(today.getDate() - (range - 1));
     startDate.setHours(0, 0, 0, 0);
     endDate = new Date();
     endDate.setHours(23, 59, 59, 999);

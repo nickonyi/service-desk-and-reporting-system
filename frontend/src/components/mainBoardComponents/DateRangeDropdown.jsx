@@ -15,7 +15,7 @@ const TIME_RANGES = [
 
 function DateRangeDropdown() {
   const [open, setOpen] = useState(false);
-  const { range, setRange, customDates, setCustomDates, startDate, endDate } = useDateRange();
+  const { range, setRange, customDates, setCustomDates } = useDateRange();
 
   const dropdownRef = useRef(null);
 
@@ -80,9 +80,12 @@ function DateRangeDropdown() {
                     : undefined
                 }
                 onSelect={(range) => {
+                  const normalizeDate = (date) =>
+                    date ? new Date(date.getFullYear(), date.getMonth(), date.getDate()) : null;
+
                   setCustomDates({
-                    startDate: range?.from ?? null,
-                    endDate: range?.to ?? null,
+                    startDate: normalizeDate(range?.from),
+                    endDate: normalizeDate(range?.to),
                   });
                 }}
               />
