@@ -3,6 +3,7 @@ import csv from 'csv-parser';
 import pkg from 'pg';
 import path from 'path';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const { Pool } = pkg;
@@ -10,6 +11,7 @@ const { Pool } = pkg;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
 // Step 1 — Read CSV
 const readCSV = async (filePath) => {
   const results = [];
@@ -42,8 +44,8 @@ const insertTickets = async (tickets) => {
   for (const ticket of tickets) {
     await pool.query(
       `INSERT INTO tickets
-       (call_id, title, description, status_id, location_id, child_category_id, created_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+       (call_id, title, description, status_id, location_id, child_category_id,site_visit_id, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
       [
         ticket.call_id,
         ticket.title,
@@ -51,6 +53,7 @@ const insertTickets = async (tickets) => {
         ticket.status_id,
         ticket.location_id,
         ticket.child_category_id,
+        ticket.site_visit_id,
         ticket.created_at,
       ]
     );
@@ -68,9 +71,9 @@ const main = async () => {
     const locationMap = await loadLookUp('locations');
     const statusMap = await loadLookUp('statuses');
     const childCategoriesMap = await loadLookUp('child_categories');
+    const siteVisitMap = await loadLookUp('site_visits');
 
     //Transform rows
-
     const tickets = rows.map((row) => ({
       call_id: row.id,
       title: row.category,
@@ -78,11 +81,17 @@ const main = async () => {
       created_at: row.date,
       location_id: locationMap[row.location],
       status_id: statusMap[row.status],
+      site_visit_id: siteVisitMap[row.state],
       child_category_id: childCategoriesMap[row.category],
     }));
-    console.log(rows.map((row) => row.status));
-    console.log(tickets);
-  } catch (error) {}
+
+    await insertTickets(tickets);
+    console.log('Tickets inserted successufully...');
+  } catch (err) {
+    console.error('Error:', err);
+  } finally {
+    await pool.end();
+  }
 };
 
 main();

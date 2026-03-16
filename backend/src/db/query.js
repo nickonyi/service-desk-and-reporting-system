@@ -201,7 +201,7 @@ export const getResolvedTicketsByVisitType = async ({ days, startDate, endDate }
   const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
 
   const query = `SELECT
-  COUNT(DISTINCT CASE WHEN sv.name = 'Onsite' THEN t.id END) AS onsite_resolved,
+  COUNT(DISTINCT CASE WHEN sv.name = 'On-site' THEN t.id END) AS onsite_resolved,
   COUNT(DISTINCT CASE WHEN sv.name = 'Remote' THEN t.id END) AS remote_resolved
 FROM tickets t
 JOIN statuses s ON t.status_id = s.id

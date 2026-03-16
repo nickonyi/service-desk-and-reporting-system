@@ -1,10 +1,9 @@
 import { Search, Filter } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { tableHeaders } from '../data.js';
+import { tableHeaders, getStatusColors } from '../data.js';
 import { useTickets } from '../context/TicketsContext.jsx';
 import TicketDetails from './TicketDetails.jsx';
 import DashboardHeader from './DashboardHeader.jsx';
-import { getStatusColors } from '../data.js';
 
 function TicketList() {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -32,19 +31,32 @@ function TicketList() {
     return matchesSearch && matchesCategory && matchesLocation && matchesStatus;
   });
 
+  // Pagination logic
   const ticketsPerPage = 10;
   const indexOfLastTicket = currentPage * ticketsPerPage;
   const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
   const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
 
   const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  // Smart pagination: show a window of pages
+  const maxPageButtons = 5; // adjust how many buttons to show
+  const half = Math.floor(maxPageButtons / 2);
+  let start = Math.max(currentPage - half, 1);
+  let end = Math.min(start + maxPageButtons - 1, totalPages);
+  start = Math.max(end - maxPageButtons + 1, 1);
+
+  const visiblePages = [];
+  for (let i = start; i <= end; i++) {
+    visiblePages.push(i);
+  }
 
   return (
     <div className="flex-1 space-y-6 bg-white">
       <DashboardHeader title="Tickets" btnText="create" />
 
       <div className="space-y-4 px-6 pb-6">
+        {/* Filters and Search */}
         <div className="bg-white rounded-lg shadow p-4">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1 relative">
@@ -104,7 +116,8 @@ function TicketList() {
           </div>
         </div>
 
-        <div className="bg-white mt-8  rounded-lg shadow  overflow-hidden">
+        {/* Ticket Table */}
+        <div className="bg-white mt-8 rounded-lg shadow overflow-hidden">
           {filteredTickets.length === 0 ? (
             <div className="text-center py-10 text-gray-500">
               <Filter size={48} className="mx-auto mb-4 opacity-50" />
@@ -112,7 +125,7 @@ function TicketList() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full ">
+              <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-50">
                   <tr>
                     {tableHeaders.map((header) => (
@@ -161,29 +174,55 @@ function TicketList() {
             </div>
           )}
         </div>
+
+        {/* Pagination */}
         <div className="flex justify-center items-center mt-4 gap-2 px-6">
           <button
-            onClick={() => {
-              setCurrentPage((prev) => Math.max(prev - 1, 1));
-            }}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="px-3 py-1 bg-gray-200  cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
+            className="px-3 py-1 bg-gray-200 cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
           >
             Prev
           </button>
-          {pageNumbers.map((num) => (
+
+          {start > 1 && (
+            <>
+              <button
+                onClick={() => setCurrentPage(1)}
+                className="px-3 py-1 rounded bg-gray-200 hover:bg-blue-200"
+              >
+                1
+              </button>
+              {start > 2 && <span className="px-2">...</span>}
+            </>
+          )}
+
+          {visiblePages.map((num) => (
             <button
               key={num}
               onClick={() => setCurrentPage(num)}
-              className={`px-3 py-1 rounded  cursor-pointer hover:bg-blue-200 ${num === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`px-3 py-1 rounded cursor-pointer hover:bg-blue-200 ${
+                num === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              }`}
             >
               {num}
             </button>
           ))}
+
+          {end < totalPages && (
+            <>
+              {end < totalPages - 1 && <span className="px-2">...</span>}
+              <button
+                onClick={() => setCurrentPage(totalPages)}
+                className="px-3 py-1 rounded bg-gray-200 hover:bg-blue-200"
+              >
+                {totalPages}
+              </button>
+            </>
+          )}
+
           <button
-            onClick={() => {
-              setCurrentPage((prev) => Math.max(prev + 1, totalPages));
-            }}
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
             className="px-3 py-1 bg-gray-200 cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
           >
@@ -191,6 +230,7 @@ function TicketList() {
           </button>
         </div>
       </div>
+
       {selectedTicket && (
         <TicketDetails
           ticket={selectedTicket}
