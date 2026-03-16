@@ -5,6 +5,8 @@ import authRouter from './routes/authRoutes.js';
 import ticketRouter from './routes/ticketRoutes.js';
 import articleRouter from './routes/articlesRoutes.js';
 import kpiRouter from './routes/KPIRoutes.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
