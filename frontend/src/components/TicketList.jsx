@@ -1,9 +1,10 @@
-import { Search, Filter, User, Clock } from 'lucide-react';
-import { useState } from 'react';
+import { Search, Filter } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { tableHeaders } from '../data.js';
 import { useTickets } from '../context/TicketsContext.jsx';
 import TicketDetails from './TicketDetails.jsx';
 import DashboardHeader from './DashboardHeader.jsx';
+import { getStatusColors } from '../data.js';
 
 function TicketList() {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -11,7 +12,13 @@ function TicketList() {
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { tickets, subcategories, statuses, locations } = useTickets();
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedLocation, selectedStatus]);
 
   const filteredTickets = tickets.filter((ticket) => {
     const matchesSearch =
@@ -25,22 +32,13 @@ function TicketList() {
     return matchesSearch && matchesCategory && matchesLocation && matchesStatus;
   });
 
-  const getStatusColors = (status = '') => {
-    switch (status.toLowerCase()) {
-      case 'open':
-        return 'text-green-800';
-      case 'in progress':
-        return 'text-yellow-800';
-      case 'awaiting user':
-        return 'text-emerald-700';
-      case 'awaiting vendor':
-        return 'text-cyan-700';
-      case 'closed':
-        return 'text-gray-500';
-      default:
-        return 'text-gray-600';
-    }
-  };
+  const ticketsPerPage = 10;
+  const indexOfLastTicket = currentPage * ticketsPerPage;
+  const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
+  const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
+
+  const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <div className="flex-1 space-y-6 bg-white">
@@ -106,7 +104,7 @@ function TicketList() {
           </div>
         </div>
 
-        <div className="bg-white mt-8 rounded-lg shadow  overflow-hidden">
+        <div className="bg-white mt-8  rounded-lg shadow  overflow-hidden">
           {filteredTickets.length === 0 ? (
             <div className="text-center py-10 text-gray-500">
               <Filter size={48} className="mx-auto mb-4 opacity-50" />
@@ -128,7 +126,7 @@ function TicketList() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredTickets.map((ticket) => (
+                  {currentTickets.map((ticket) => (
                     <tr
                       key={ticket.id}
                       onClick={() => setSelectedTicket(ticket)}
@@ -162,6 +160,35 @@ function TicketList() {
               </table>
             </div>
           )}
+        </div>
+        <div className="flex justify-center items-center mt-4 gap-2 px-6">
+          <button
+            onClick={() => {
+              setCurrentPage((prev) => Math.max(prev - 1, 1));
+            }}
+            disabled={currentPage === 1}
+            className="px-3 py-1 bg-gray-200  cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          {pageNumbers.map((num) => (
+            <button
+              key={num}
+              onClick={() => setCurrentPage(num)}
+              className={`px-3 py-1 rounded  cursor-pointer hover:bg-blue-200 ${num === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+            >
+              {num}
+            </button>
+          ))}
+          <button
+            onClick={() => {
+              setCurrentPage((prev) => Math.max(prev + 1, totalPages));
+            }}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 bg-gray-200 cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </div>
       {selectedTicket && (

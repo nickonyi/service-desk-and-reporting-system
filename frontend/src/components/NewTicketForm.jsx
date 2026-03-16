@@ -32,7 +32,6 @@ function NewTicketForm() {
   );
 
   const resolvedStatus = statuses.find((s) => s.name.toLowerCase() === 'resolved');
-  console.log(resolvedStatus);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

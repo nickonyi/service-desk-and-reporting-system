@@ -26,7 +26,6 @@ export const ArticlesProvider = ({ children }) => {
         if (!res.ok) {
           throw new Error(json.message || 'Failed to fetch articles');
         }
-        console.log(json.data);
 
         setArticles(json.data);
       } catch (error) {
