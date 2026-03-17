@@ -205,8 +205,11 @@ export const getResolvedTicketsByVisitType = async ({ days, startDate, endDate }
   COUNT(DISTINCT CASE WHEN sv.name = 'Remote' THEN t.id END) AS remote_resolved
 FROM tickets t
 JOIN statuses s ON t.status_id = s.id
-JOIN site_visits sv ON t.site_visit_id = sv.id
+ JOIN site_visits sv ON t.site_visit_id = sv.id
 ${clause.length ? clause + " AND s.name = 'Resolved'" : "WHERE s.name = 'Resolved'"};`;
+
+  console.log(query);
+  console.log(params);
 
   const result = await db.query(query, params);
   return result.rows[0];
