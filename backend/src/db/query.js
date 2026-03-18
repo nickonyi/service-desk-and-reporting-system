@@ -254,6 +254,7 @@ export const getEfrisTicketsByStore = async ({ days, startDate, endDate }) => {
     GROUP BY l.name
     ORDER BY l.name;
   `;
+console.log(params);
 
   const result = await db.query(query, params);
 
