@@ -208,9 +208,6 @@ JOIN statuses s ON t.status_id = s.id
  JOIN site_visits sv ON t.site_visit_id = sv.id
 ${clause.length ? clause + " AND s.name = 'Resolved'" : "WHERE s.name = 'Resolved'"};`;
 
-  console.log(query);
-  console.log(params);
-
   const result = await db.query(query, params);
   return result.rows[0];
 };
@@ -227,7 +224,7 @@ export const getTicketsCountByCategory = async ({ days, startDate, endDate }) =>
     JOIN child_categories cc ON t.child_category_id = cc.id
     JOIN sub_categories sc ON cc.sub_category_id = sc.id
     JOIN categories c ON sc.category_id = c.id
-    ${clause} 
+    ${clause} AND t.child_category_id != 29;
   `;
 
   const result = await db.query(query, params);
@@ -250,7 +247,7 @@ export const getEfrisTicketsByStore = async ({ days, startDate, endDate }) => {
     FROM locations l
     LEFT JOIN tickets t ON t.location_id = l.id
     LEFT JOIN child_categories cc ON t.child_category_id = cc.id
-    WHERE l.name IN ('Acacia', 'Bugolobi', 'Naalya', 'Golf course')
+    WHERE l.name IN ('Acacia', 'Bugolobi', 'Naalya', 'Golf Course')
     GROUP BY l.name
     ORDER BY l.name;
   `;

@@ -60,10 +60,15 @@ const insertTickets = async (tickets) => {
   }
 };
 
+const createTicketComments = (tickets) => {
+  const commentsArr = tickets.map((ticket) => `Error:${ticket.description} sku:${ticket.extras}`);
+  return commentsArr;
+};
+
 const main = async () => {
   try {
     //Load csv
-    const csvFilePath = path.resolve('./src/db/tickets-ne.csv');
+    const csvFilePath = path.resolve('./src/db/tickets-e.csv');
     const rows = await readCSV(csvFilePath);
     console.log('CSV rows loaded', rows.length);
 
@@ -76,16 +81,22 @@ const main = async () => {
     //Transform rows
     const tickets = rows.map((row) => ({
       call_id: row.id,
-      title: row.category,
+      title: row.description,
       description: row.comment,
       created_at: row.date,
       location_id: locationMap[row.location],
       status_id: statusMap[row.status],
-      site_visit_id: siteVisitMap[row.state],
-      child_category_id: childCategoriesMap[row.category],
+      site_visit_id: 1,
+      child_category_id: 29,
     }));
 
-    await insertTickets(tickets);
+    const comments = createTicketComments(rows);
+    const ticketsWithComments = tickets.map((ticket, index) => ({
+      ...ticket,
+      description: comments[index],
+    }));
+
+    await insertTickets(ticketsWithComments);
     console.log('Tickets inserted successufully...');
   } catch (err) {
     console.error('Error:', err);

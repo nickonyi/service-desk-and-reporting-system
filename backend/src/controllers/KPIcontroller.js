@@ -44,6 +44,8 @@ export const fetchTicketsCountByCategory = async (req, res, next) => {
       startDate,
       endDate,
     });
+    console.log(ticketCountByCategory);
+
     res.json({
       success: true,
       data: ticketCountByCategory,

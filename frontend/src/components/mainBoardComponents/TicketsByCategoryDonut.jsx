@@ -23,6 +23,7 @@ function TicketsByCategoryDonut({ title, daysRange }) {
         }
         const res = await fetch(url);
         const json = await res.json();
+        console.log(json.data);
 
         const formatted = [
           {

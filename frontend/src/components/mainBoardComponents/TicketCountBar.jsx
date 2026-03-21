@@ -15,9 +15,6 @@ function TicketCountBar() {
     return created >= startDate && created < new Date(endDate.getTime());
   });
 
-  console.log('Tickets count:', tickets.length);
-  console.log('Filtered Tickets count:', filteredTickets.length);
-
   const totalTickets = filteredTickets.length;
   const openTickets = filteredTickets.filter((t) => t.status.toLowerCase() === 'open').length;
   const inProgressTickets = filteredTickets.filter((t) => {
