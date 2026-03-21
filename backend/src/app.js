@@ -1,11 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import { errorHandler } from './middleware/errorHandler.js';
-import authRouter from './routes/authRoutes.js';
-import ticketRouter from './routes/ticketRoutes.js';
-import articleRouter from './routes/articlesRoutes.js';
-import kpiRouter from './routes/KPIRoutes.js';
-import dotenv from 'dotenv';
+import express from "express";
+import cors from "cors";
+import { errorHandler } from "./middleware/errorHandler.js";
+import authRouter from "./routes/authRoutes.js";
+import ticketRouter from "./routes/ticketRoutes.js";
+import articleRouter from "./routes/articlesRoutes.js";
+import kpiRouter from "./routes/KPIRoutes.js";
+import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
@@ -16,15 +16,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
-app.use('/api/auth', authRouter);
-app.use('/api/tickets', ticketRouter);
-app.use('/api/articles', articleRouter);
-app.use('/api/kpi', kpiRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/tickets", ticketRouter);
+app.use("/api/articles", articleRouter);
+app.use("/api/kpi", kpiRouter);
 
 app.use(errorHandler);
 app.listen(PORT, () => {
