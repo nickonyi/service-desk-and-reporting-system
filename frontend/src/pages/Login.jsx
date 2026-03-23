@@ -4,6 +4,7 @@ import { useState } from "react";
 
 function Login() {
   const { login } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,7 +12,9 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const result = await login(username, password);
+    setLoading(false);
     if (result.success) {
       navigate("/dashboard");
     } else {
@@ -65,9 +68,13 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full bg-black text-white py-1 rounded-lg font-medium hover:bg-gray-900 cursor-pointer transition"
+            disabled={loading}
+            className="w-full bg-black text-white py-1 rounded-lg font-medium hover:bg-gray-900 cursor-pointer transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Log in
+            {loading && (
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            )}
+            {loading ? "Logging in..." : "Log in"}
           </button>
         </form>
       </div>
