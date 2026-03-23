@@ -1,16 +1,16 @@
-import { Search, Filter } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { tableHeaders, getStatusColors } from '../data.js';
-import { useTickets } from '../context/TicketsContext.jsx';
-import TicketDetails from './TicketDetails.jsx';
-import DashboardHeader from './DashboardHeader.jsx';
+import { Search, Filter } from "lucide-react";
+import { useEffect, useState } from "react";
+import { tableHeaders, getStatusColors } from "../data.js";
+import { useTickets } from "../context/TicketsContext.jsx";
+import TicketDetails from "./TicketDetails.jsx";
+import DashboardHeader from "./DashboardHeader.jsx";
 
 function TicketList() {
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { tickets, subcategories, statuses, locations } = useTickets();
@@ -20,12 +20,12 @@ function TicketList() {
   }, [searchQuery, selectedCategory, selectedLocation, selectedStatus]);
 
   const filteredTickets = tickets.filter((ticket) => {
-    const matchesSearch =
-      ticket.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ticket.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = ticket.call_id?.includes(searchQuery);
 
-    const matchesCategory = !selectedCategory || ticket.sub_category === selectedCategory;
-    const matchesLocation = !selectedLocation || ticket.location === selectedLocation;
+    const matchesCategory =
+      !selectedCategory || ticket.sub_category === selectedCategory;
+    const matchesLocation =
+      !selectedLocation || ticket.location === selectedLocation;
     const matchesStatus = !selectedStatus || ticket.status === selectedStatus;
 
     return matchesSearch && matchesCategory && matchesLocation && matchesStatus;
@@ -35,7 +35,10 @@ function TicketList() {
   const ticketsPerPage = 10;
   const indexOfLastTicket = currentPage * ticketsPerPage;
   const indexOfFirstTicket = indexOfLastTicket - ticketsPerPage;
-  const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
+  const currentTickets = filteredTickets.slice(
+    indexOfFirstTicket,
+    indexOfLastTicket,
+  );
 
   const totalPages = Math.ceil(filteredTickets.length / ticketsPerPage);
 
@@ -145,7 +148,9 @@ function TicketList() {
                       onClick={() => setSelectedTicket(ticket)}
                       className="hover:bg-gray-50 cursor-pointer"
                     >
-                      <td className="px-6 py-4 text-sm text-gray-900">{ticket.call_id}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {ticket.call_id}
+                      </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-900">
                         {ticket.title}
                       </td>
@@ -162,11 +167,15 @@ function TicketList() {
                           {ticket.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm">{ticket.assigned_to}</td>
+                      <td className="px-6 py-4 text-sm">
+                        {ticket.assigned_to}
+                      </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
                         {new Date(ticket.created_at).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 text-sm">{ticket.site_visit_type}</td>
+                      <td className="px-6 py-4 text-sm">
+                        {ticket.site_visit_type}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -202,7 +211,7 @@ function TicketList() {
               key={num}
               onClick={() => setCurrentPage(num)}
               className={`px-3 py-1 rounded cursor-pointer hover:bg-blue-200 ${
-                num === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-200'
+                num === currentPage ? "bg-blue-500 text-white" : "bg-gray-200"
               }`}
             >
               {num}
@@ -222,7 +231,9 @@ function TicketList() {
           )}
 
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
             disabled={currentPage === totalPages}
             className="px-3 py-1 bg-gray-200 cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
           >
