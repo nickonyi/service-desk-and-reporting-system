@@ -45,7 +45,7 @@ export const ArticlesProvider = ({ children }) => {
   const addArticle = async (articleData) => {
     try {
       setLoading(true);
-      const res = await fetch("/api/articles", {
+      const res = await fetch(`${API_URL}/api/articles`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(articleData),
