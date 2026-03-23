@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 
 const ArticleContext = createContext();
 
@@ -6,7 +6,7 @@ export const useArticles = () => {
   const context = useContext(ArticleContext);
 
   if (!context) {
-    throw new Error('useArticles must be used within ArticlesProvider');
+    throw new Error("useArticles must be used within ArticlesProvider");
   }
   return context;
 };
@@ -16,15 +16,19 @@ export const ArticlesProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const API_URL = import.meta.env.VITE_API_URL || "";
+
   useEffect(() => {
-    const fetchArtices = async () => {
+    const fetchArticles = async () => {
       try {
+        setError(null);
         setLoading(true);
-        const res = await fetch('/api/articles');
+
+        const res = await fetch(`${API_URL}/api/articles`);
         const json = await res.json();
 
         if (!res.ok) {
-          throw new Error(json.message || 'Failed to fetch articles');
+          throw new Error(json.message || "Failed to fetch articles");
         }
 
         setArticles(json.data);
@@ -34,21 +38,22 @@ export const ArticlesProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    fetchArtices();
+
+    fetchArticles();
   }, []);
 
   const addArticle = async (articleData) => {
     try {
       setLoading(true);
-      const res = await fetch('/api/articles', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/articles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(articleData),
       });
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || 'Article was not added');
+        throw new Error(data.message || "Article was not added");
       }
       setArticles((prev) => [data.data, ...prev]);
     } catch (error) {
@@ -59,6 +64,8 @@ export const ArticlesProvider = ({ children }) => {
   };
 
   return (
-    <ArticleContext.Provider value={{ articles, addArticle }}>{children}</ArticleContext.Provider>
+    <ArticleContext.Provider value={{ articles, addArticle }}>
+      {children}
+    </ArticleContext.Provider>
   );
 };

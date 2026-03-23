@@ -1,5 +1,8 @@
-export const buildDateFilter = ({ days, startDate, endDate }, column = 'created_at') => {
-  let clause = '';
+export const buildDateFilter = (
+  { days, startDate, endDate },
+  column = "created_at",
+) => {
+  let clause = "";
   let params = [];
 
   if (startDate && endDate) {
@@ -21,12 +24,3 @@ export const buildDateFilter = ({ days, startDate, endDate }, column = 'created_
   }
   return { clause, params };
 };
-
-export const formatTimestamp = (d) =>
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(
-    2,
-    '0'
-  )} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(
-    2,
-    '0'
-  )}:${String(d.getSeconds()).padStart(2, '0')}`;
