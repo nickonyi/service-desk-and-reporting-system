@@ -1,9 +1,9 @@
-import { buildDateFilter } from '../utils/dateFilter.js';
-import * as db from './pool.js';
-import bycrpt from 'bcrypt';
+import { buildDateFilter } from "../utils/dateFilter.js";
+import * as db from "./pool.js";
+import bycrpt from "bcrypt";
 
 export const loginUser = async (email, password) => {
-  const result = await db.query('SELECT * FROM users WHERE email=$1', [email]);
+  const result = await db.query("SELECT * FROM users WHERE email=$1", [email]);
 
   if (result.rows.length === 0) {
     return null;
@@ -18,11 +18,11 @@ export const loginUser = async (email, password) => {
   return user;
 };
 
-export const registerUser = async (email, password, role = 'user') => {
+export const registerUser = async (email, password, role = "user") => {
   const hashedPassword = await bycrpt.hash(password, 10);
   const result = await db.query(
-    'INSERT INTO users (email,password,role) VALUES ($1,$2,$3) RETURNING id,email,role',
-    [email, hashedPassword, role]
+    "INSERT INTO users (email,password,role) VALUES ($1,$2,$3) RETURNING id,email,role",
+    [email, hashedPassword, role],
   );
 
   return result.rows[0];
@@ -37,7 +37,7 @@ export const insertTickets = async (
   callId,
   assignedToId,
   siteVisitId,
-  closed_at
+  closed_at,
 ) => {
   const query = `INSERT INTO tickets (call_id,title,description,
   child_category_id,status_id,location_id,assigned_tier_id,site_visit_id,closed_at)
@@ -60,32 +60,32 @@ export const insertTickets = async (
 };
 
 export const getSubCategories = async () => {
-  const result = await db.query('SELECT * FROM sub_categories ORDER BY id');
+  const result = await db.query("SELECT * FROM sub_categories ORDER BY id");
   return result.rows;
 };
 
 export const getChildCategories = async () => {
-  const result = await db.query('SELECT * FROM child_categories ORDER BY name');
+  const result = await db.query("SELECT * FROM child_categories ORDER BY name");
   return result.rows;
 };
 
 export const getStatuses = async () => {
-  const result = await db.query('SELECT * FROM statuses ORDER BY id');
+  const result = await db.query("SELECT * FROM statuses ORDER BY id");
   return result.rows;
 };
 
 export const getLocations = async () => {
-  const result = await db.query('SELECT * FROM locations ORDER BY id');
+  const result = await db.query("SELECT * FROM locations ORDER BY id");
   return result.rows;
 };
 
 export const getTiers = async () => {
-  const result = await db.query('SELECT * FROM support_tiers ORDER BY id');
+  const result = await db.query("SELECT * FROM support_tiers ORDER BY id");
   return result.rows;
 };
 
 export const getSiteVisits = async () => {
-  const result = await db.query('SELECT * FROM site_visits ORDER BY id');
+  const result = await db.query("SELECT * FROM site_visits ORDER BY id");
   return result.rows;
 };
 
@@ -134,7 +134,7 @@ export const updateTicketbyId = async (id, upates) => {
   values.push(id);
 
   const query = `
-  UPDATE tickets SET ${fields.join(',')}, updated_at = NOW()
+  UPDATE tickets SET ${fields.join(",")}, updated_at = NOW()
   WHERE id = $${index}
   RETURNING *
   `;
@@ -162,7 +162,7 @@ export const createArticle = async (title, excerpt, content, author) => {
     VALUES($1,$2,$3,$4)
     RETURNING id, title, excerpt, content, author, created_at
     `,
-    [title, excerpt, content, author]
+    [title, excerpt, content, author],
   );
 
   return result.rows[0];
@@ -174,13 +174,16 @@ export const getArticleById = async (id) => {
     SELECT id,title,excerpt,content,author,created_at FROM articles
     WHERE id = $1
     `,
-    [id]
+    [id],
   );
   return result.rows[0];
 };
 
 export const getTicketsByCountry = async ({ days, startDate, endDate }) => {
-  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
+  const { clause, params } = buildDateFilter(
+    { days, startDate, endDate },
+    "t.created_at",
+  );
 
   const query = `
       SELECT
@@ -189,16 +192,24 @@ export const getTicketsByCountry = async ({ days, startDate, endDate }) => {
       FROM tickets t
       JOIN locations l ON t.location_id = l.id
       JOIN countries c ON l.country_id = c.id
-       ${clause}
+       ${clause} AND t.child_category_id != 29
       GROUP BY c.name
       ORDER BY ticket_count DESC;
     `;
+
   const result = await db.query(query, params);
   return result.rows;
 };
 
-export const getResolvedTicketsByVisitType = async ({ days, startDate, endDate }) => {
-  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
+export const getResolvedTicketsByVisitType = async ({
+  days,
+  startDate,
+  endDate,
+}) => {
+  const { clause, params } = buildDateFilter(
+    { days, startDate, endDate },
+    "t.created_at",
+  );
 
   const query = `SELECT
   COUNT(DISTINCT CASE WHEN sv.name = 'On-site' THEN t.id END) AS onsite_resolved,
@@ -212,8 +223,15 @@ ${clause.length ? clause + " AND s.name = 'Resolved'" : "WHERE s.name = 'Resolve
   return result.rows[0];
 };
 
-export const getTicketsCountByCategory = async ({ days, startDate, endDate }) => {
-  const { clause, params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
+export const getTicketsCountByCategory = async ({
+  days,
+  startDate,
+  endDate,
+}) => {
+  const { clause, params } = buildDateFilter(
+    { days, startDate, endDate },
+    "t.created_at",
+  );
 
   const query = `
     SELECT 
@@ -224,7 +242,7 @@ export const getTicketsCountByCategory = async ({ days, startDate, endDate }) =>
     JOIN child_categories cc ON t.child_category_id = cc.id
     JOIN sub_categories sc ON cc.sub_category_id = sc.id
     JOIN categories c ON sc.category_id = c.id
-    ${clause} AND t.child_category_id != 29;
+    ${clause} ;
   `;
 
   const result = await db.query(query, params);
@@ -232,7 +250,10 @@ export const getTicketsCountByCategory = async ({ days, startDate, endDate }) =>
 };
 
 export const getEfrisTicketsByStore = async ({ days, startDate, endDate }) => {
-  const { params } = buildDateFilter({ days, startDate, endDate }, 't.created_at');
+  const { params } = buildDateFilter(
+    { days, startDate, endDate },
+    "t.created_at",
+  );
 
   const query = `
     SELECT
