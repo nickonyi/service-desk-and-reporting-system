@@ -1,0 +1,49 @@
+id,location,date,category,status,state,comment,,,,,,,,,,,,,,,,,,,,
+4509819,Mlimani City,3/17/2026,Desktop.Software,Resolved,Remote,Unable to launch FPDriver.
+4509829,Kunduchi,3/17/2026,Store.Point Of Sale.Server,Resolved,Remote,Prolonged boot after power outage (POS Server).
+4509833,Kunduchi,3/17/2026,Desktop.Software,Resolved,Remote,Prolonged boot after power outage (Customer Enquiry).
+4509841,Kunduchi,3/17/2026,Desktop.Software,Resolved,Remote,Assist with switching display (Server to CCTV).
+4509854,Mlimani City,3/17/2026,Desktop.Software,Resolved,Remote,Assist with enabling SmartView add-in on Excel (FINMGRTAN).
+4507728,Palm Village,3/17/2026,Desktop.Printer,Resolved,Remote,Unspecified printer issue.
+4507704,Sarit,3/17/2026,Network.Router,Resolved,Remote,The router had issues powering on
+4509551,Nyali City,3/17/2026,Store.Point Of Sale.Hardware,Resolved,Remote,Unable to view checklist
+4510329,Yaya Centre,3/18/2026,Desktop.Back office PC.Maintenance,Resolved,Remote,Power issues in the till area causing the machines not to power on
+4511409,Naalya,3/18/2026,Desktop.Password,Resolved,Remote,Password reset for the user w7107934
+4511989,Kunduchi,3/18/2026,Store.Workplace Compliance.Require logon details,Resolved,Remote,Missing store.
+4510769,Garden City,3/18/2026,Network.Internet,Resolved,Remote,Internet down
+4511582,Garden City,3/18/2026,Store.Back Office.EOD,Resolved,Remote,Unable to process (Back Office server offline).
+4511724,The Hub,3/18/2026,Store.Back Office.EOD,Resolved,Remote,Unable to process (Back Office server offline).
+4512135,Garden City,3/18/2026,Network.Internet,Resolved,Remote,Unable to process (Back Office server offline).
+4510447,Yaya Centre,3/18/2026,Store.Back Office.EOD,Resolved,Remote,Unable to process (Back Office server offline).
+4511835,Yaya Centre,3/18/2026,Store Operations.Loss of Trade.Power Failure,Open,Remote,Power issues at the store
+4512707,Mlimani City,3/19/2026,Network.Internet,Resolved,Remote,No internet (ISP fiber infrastructure fault).
+4514103,Mlimani City,3/19/2026,Store.Point Of Sale.Receipts,Resolved,Remote,Unprinted receipt (TIN syntax).
+4515918,The Hub,3/19/2026,Store.Point Of Sale.Receipts,Resolved,Remote,Unprinted receipt (TIN syntax).
+4515943,Village Market,3/19/2026,Store.Point Of Sale.Server,Resolved,Remote,Registering TIN number
+4515956,Yaya Centre,3/19/2026,Store.Point Of Sale.Server,Resolved,Remote,Running sales scheduler for exchange
+4514602,Naalya,3/19/2026,Store.Back Office.EOD,Resolved,Remote,Sales data transfer error
+4512929,Naalya,3/19/2026,Desktop.Software,Awaiting User,On-site,"Microsoft applications unable to load on WWOPSMGRUGA, user unable to sign onto the apps"
+4513114,Garden City,3/19/2026,Finance.Oracle Financials,Resolved,Remote,Password reset
+4513534,Rupa Mall,3/19/2026,Store.PeopleSoft,Resolved,Remote,People soft password reset
+4513663,Rupa Mall,3/19/2026,Finance.Oracle Financials,Resolved,Remote,Password reset
+4514431,Yaya Centre,3/19/2026,WW Store.Export Warehouse,Resolved,Remote,Receiving claims/reports.
+4515584,PPF Tower,3/20/2026,Store.Point Of Sale.Printer,Resolved,Remote,Serv pass Z 455 
+4515588,Naalya,3/20/2026,Desktop.Printer,Resolved,Remote,Back office HP laserjet MFP M232-M237 was unbale to print documents
+4515598,Bugolobi,3/20/2026,Desktop.Printer,Resolved,Remote,Back office HP laserjet MFP M232-M237 was unbale to print documents
+4515791,Garden City,3/20/2026,Store.Point Of Sale.Software,Resolved,Remote,Till 03 had incorrect sales date error on POS
+4515822,Galleria,3/20/2026,Desktop.Printer,Resolved,Remote,Server was unable to print checklists
+4515831,Galleria,3/20/2026,Desktop.Software,Resolved,Remote,Wordpad application has been installed on the server upon user request
+4515470,PPF Tower,3/20/2026,Store.Point Of Sale.Receipts,Resolved,Remote,Unprinted receipt (TIN syntax).
+4516065,Kunduchi,3/20/2026,Store.Point Of Sale.Receipts,Resolved,Remote,Unprinted receipt (TIN syntax).
+4517485,Nyali MSA,3/21/2026,Store.Point Of Sale.Printer,Awaiting Vendor,Remote,Serv pass? 1115 on KRAMW004202110002737 on lo2
+4517808,Mlimani City,3/21/2026,Store.Point Of Sale.Receipts,Resolved,Remote,Printed till 2 receipt transaction no AAK/9571/260321/00000005 
+4518112,The Junction,3/21/2026,Store.Point Of Sale.Printer,Awaiting User,Remote,"FP printer on till 05, prints void receipts"
+4518113,Sarit,3/21/2026,Store.Point Of Sale.Server,Resolved,Remote,Wrewards loyalty cards were not updating
+4518385,Two Rivers,3/21/2026,Desktop.Password,Resolved,Remote,"Password reset for user, w9581sat"
+4517544,Mlimani City,3/21/2026,Store.Point Of Sale.Printer,Awaiting User,Remote,Unsent reports (EFD blocked).
+4518109,Kunduchi,3/21/2026,Store.Workplace Compliance.Require logon details,Open,Remote,Reset checklist.
+4519255,Bugolobi,3/22/2026,Network.Internet,Resolved,Remote,Store reporting down due to power outage
+4519600,Mlimani City,3/22/2026,Network.Internet,Resolved,Remote,Internet down
+4519674,Kunduchi,3/22/2026,Store.Back Office.EOD,Resolved,Remote,Unable to process (Back Office server offline).
+4519692,Palm Village,3/22/2026,Store.Back Office.EOD,Resolved,Remote,Unable to process (Back Office server offline).
+4519563,Garden City,3/22/2026,WW Store.Export Warehouse,Open,Remote,Receiving claims/reports.

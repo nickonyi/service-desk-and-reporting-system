@@ -68,7 +68,6 @@ function TicketsByEfrisBarChart({ title }) {
 
     fetchTickets();
   }, [range, startDate, endDate]);
-  console.log(data);
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg px-4 py-6 h-80">

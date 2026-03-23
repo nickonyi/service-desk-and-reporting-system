@@ -1,19 +1,19 @@
-import { useNavigate } from 'react-router';
-import { useAuth } from '../context/AuthContext';
-import { useState } from 'react';
+import { useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
 
 function Login() {
   const { login } = useAuth();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await login(username, password);
     if (result.success) {
-      navigate('/dashboard');
+      navigate("/dashboard");
     } else {
       setError(result.message);
     }
@@ -27,11 +27,16 @@ function Login() {
             <img src="/helpdesk.svg" alt="" />
           </div>
         </div>
-        <h1 className="text-2xl font-semibold  mb-6">Welcome to the service desk</h1>
+        <h1 className="text-2xl font-semibold  mb-6">
+          Welcome to the service desk
+        </h1>
         {error && <p className="text-red-500">{error}</p>}
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
@@ -43,7 +48,10 @@ function Login() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
@@ -62,10 +70,6 @@ function Login() {
             Log in
           </button>
         </form>
-        <p className="text-sm text-center text-gray-500 mt-6">
-          Forgot your password?
-          <span className="ml-1 underline cursor-pointer">Reset</span>
-        </p>
       </div>
     </div>
   );

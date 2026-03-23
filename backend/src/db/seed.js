@@ -1,15 +1,15 @@
-import fs from 'fs';
-import csv from 'csv-parser';
-import pkg from 'pg';
-import path from 'path';
-import dotenv from 'dotenv';
+import fs from "fs";
+import csv from "csv-parser";
+import pkg from "pg";
+import path from "path";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const { Pool } = pkg;
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL_PROD,
 });
 
 // Step 1 — Read CSV
@@ -19,11 +19,11 @@ const readCSV = async (filePath) => {
   return new Promise((resolve, reject) => {
     fs.createReadStream(filePath)
       .pipe(csv())
-      .on('data', (data) => results.push(data))
-      .on('end', () => {
+      .on("data", (data) => results.push(data))
+      .on("end", () => {
         resolve(results);
       })
-      .on('error', (error) => {
+      .on("error", (error) => {
         reject(error);
       });
   });
@@ -55,39 +55,41 @@ const insertTickets = async (tickets) => {
         ticket.child_category_id,
         ticket.site_visit_id,
         ticket.created_at,
-      ]
+      ],
     );
   }
 };
 
 const createTicketComments = (tickets) => {
-  const commentsArr = tickets.map((ticket) => `Error:${ticket.description} sku:${ticket.extras}`);
+  const commentsArr = tickets.map(
+    (ticket) => `Error:${ticket.description} sku:${ticket.extras}`,
+  );
   return commentsArr;
 };
 
 const main = async () => {
   try {
     //Load csv
-    const csvFilePath = path.resolve('./src/db/tickets-e.csv');
+    const csvFilePath = path.resolve("./src/db/tickets.csv");
     const rows = await readCSV(csvFilePath);
-    console.log('CSV rows loaded', rows.length);
+    console.log("CSV rows loaded", rows.length);
 
     //Load lookup maps
-    const locationMap = await loadLookUp('locations');
-    const statusMap = await loadLookUp('statuses');
-    const childCategoriesMap = await loadLookUp('child_categories');
-    const siteVisitMap = await loadLookUp('site_visits');
+    const locationMap = await loadLookUp("locations");
+    const statusMap = await loadLookUp("statuses");
+    const childCategoriesMap = await loadLookUp("child_categories");
+    const siteVisitMap = await loadLookUp("site_visits");
 
     //Transform rows
     const tickets = rows.map((row) => ({
       call_id: row.id,
-      title: row.description,
+      title: row.category,
       description: row.comment,
       created_at: row.date,
       location_id: locationMap[row.location],
       status_id: statusMap[row.status],
-      site_visit_id: 1,
-      child_category_id: 29,
+      site_visit_id: siteVisitMap[row.state],
+      child_category_id: childCategoriesMap[row.category],
     }));
 
     const comments = createTicketComments(rows);
@@ -96,10 +98,10 @@ const main = async () => {
       description: comments[index],
     }));
 
-    await insertTickets(ticketsWithComments);
-    console.log('Tickets inserted successufully...');
+    await insertTickets(tickets);
+    console.log("Tickets inserted successufully...");
   } catch (err) {
-    console.error('Error:', err);
+    console.error("Error:", err);
   } finally {
     await pool.end();
   }
