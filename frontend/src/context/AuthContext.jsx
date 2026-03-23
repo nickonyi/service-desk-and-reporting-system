@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       return { success: true };
-    } catch (error) {
+    } catch (err) {
       console.log("Login error:", err);
       return { success: false, message: "network error" };
     }
