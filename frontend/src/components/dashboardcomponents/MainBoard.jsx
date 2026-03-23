@@ -1,10 +1,9 @@
-import DonutPlaceholder from '../mainBoardComponents/DonutPlaceholder';
-import FilterBar from '../mainBoardComponents/FilterBar';
-import TicketCountBar from '../mainBoardComponents/TicketCountBar';
-import TicketsByCategoryDonut from '../mainBoardComponents/TicketsByCategoryDonut';
-import TicketsByCountryBarChart from '../mainBoardComponents/TicketsByCountryBarChart';
-import TicketsResolvedByVisitDonut from '../mainBoardComponents/TicketsResolvedByVisitDonut';
-import TicketsByEfrisBarChart from '../mainBoardComponents/TicketsByEfrisBarChart';
+import FilterBar from "../mainBoardComponents/FilterBar";
+import TicketCountBar from "../mainBoardComponents/TicketCountBar";
+import TicketsByCategoryDonut from "../mainBoardComponents/TicketsByCategoryDonut";
+import TicketsByCountryBarChart from "../mainBoardComponents/TicketsByCountryBarChart";
+import TicketsResolvedByVisitDonut from "../mainBoardComponents/TicketsResolvedByVisitDonut";
+import TicketsByEfrisBarChart from "../mainBoardComponents/TicketsByEfrisBarChart";
 
 function MainBoard() {
   return (
