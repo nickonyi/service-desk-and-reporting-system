@@ -156,14 +156,22 @@ export const getAllArtcicles = async () => {
   return result.rows;
 };
 
-export const createArticle = async (title, excerpt, content, author) => {
+export const createArticle = async (
+  title,
+  excerpt,
+  content,
+  author,
+  imageUrl = null,
+) => {
   const result = await db.query(
-    `INSERT into articles(title,excerpt,content,author)
+    `INSERT into articles(title,excerpt,content,author,imageUrl)
     VALUES($1,$2,$3,$4)
-    RETURNING id, title, excerpt, content, author, created_at
+    RETURNING id, title, excerpt, content, author, created_at,imageUrl
     `,
-    [title, excerpt, content, author],
+    [title, excerpt, content, author, imageUrl],
   );
+
+  console.log(result);
 
   return result.rows[0];
 };

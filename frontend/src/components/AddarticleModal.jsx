@@ -1,24 +1,34 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { useArticles } from '../context/ArticlesContext';
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useArticles } from "../context/ArticlesContext";
 
 export default function AddArticle() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
   const { addArticle } = useArticles();
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!title || !content) {
-      return alert('fill all the fields!');
+      return alert("fill all the fields!");
     }
-    addArticle({
-      title,
-      excerpt: content.slice(0, 150) + '...',
-      content,
-      author: 'Admin',
-    });
-    navigate('/dashboard/knowledge');
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("excerpt", content.slice(0, 150) + "...");
+    formData.append("content", content);
+    formData.append("author", "Admin");
+    console.log(image);
+
+    if (image) {
+      formData.append("image", image);
+    }
+
+    console.log(formData);
+
+    await addArticle(formData);
+    navigate("/dashboard/knowledge");
   };
   return (
     <div className="min-h-screen bg-white text-gray-800 flex-2 ">
@@ -61,12 +71,22 @@ export default function AddArticle() {
               onChange={(e) => setContent(e.target.value)}
             />
           </div>
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm
+                         focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              placeholder="Insert your image"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </div>
 
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-4 ">
             <button
               className="rounded-lg cursor-pointer border px-4 py-2 text-sm hover:bg-gray-100"
-              onClick={() => navigate('knowledge')}
+              onClick={() => navigate("knowledge")}
             >
               Cancel
             </button>

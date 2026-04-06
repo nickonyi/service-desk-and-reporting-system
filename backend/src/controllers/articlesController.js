@@ -1,4 +1,5 @@
-import { createArticle, getAllArtcicles, getArticleById } from '../db/query.js';
+import { createArticle, getAllArtcicles, getArticleById } from "../db/query.js";
+import { streamUpload } from "../utils/streamer.js";
 
 export const fetchArticles = async (req, res, next) => {
   try {
@@ -16,7 +17,7 @@ export const fetchArticleById = async (req, res, next) => {
     if (!article) {
       res.status(404).json({
         success: false,
-        message: 'article not found!',
+        message: "article not found!",
       });
     }
     res.json({ success: true, data: article });
@@ -32,10 +33,28 @@ export const addArticle = async (req, res, next) => {
     if (!title || !excerpt || !content) {
       return res.status(400).json({
         success: false,
-        message: 'Title, excerpt and content are required',
+        message: "Title, excerpt and content are required",
       });
     }
-    const newArticle = await createArticle(title, excerpt, content, author);
+
+    let imageUrl = null;
+
+    // If user uploaded an image, upload it to Cloudinary
+    if (req.file) {
+      const result = await streamUpload(req.file.buffer);
+      imageUrl = result.secure_url;
+      console.log(imageUrl);
+    }
+    const newArticle = await createArticle(
+      title,
+      excerpt,
+      content,
+      author,
+      imageUrl,
+    );
+
+    console.log(newArticle);
+
     res.status(201).json({
       success: true,
       data: newArticle,

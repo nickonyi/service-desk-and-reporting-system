@@ -42,13 +42,14 @@ export const ArticlesProvider = ({ children }) => {
     fetchArticles();
   }, []);
 
-  const addArticle = async (articleData) => {
+  const addArticle = async (formData) => {
     try {
       setLoading(true);
+      console.log(formData);
+
       const res = await fetch(`${API_URL}/api/articles`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(articleData),
+        body: formData,
       });
       const data = await res.json();
 
