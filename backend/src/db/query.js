@@ -150,7 +150,7 @@ export const deleteTicketbyId = async (id) => {
 
 export const getAllArtcicles = async () => {
   const result = await db.query(`
-    SELECT id,title,excerpt,content,author,created_at FROM articles
+    SELECT * FROM articles
     ORDER BY created_at DESC
     `);
   return result.rows;
@@ -165,13 +165,11 @@ export const createArticle = async (
 ) => {
   const result = await db.query(
     `INSERT into articles(title,excerpt,content,author,imageUrl)
-    VALUES($1,$2,$3,$4)
+    VALUES($1,$2,$3,$4,$5)
     RETURNING id, title, excerpt, content, author, created_at,imageUrl
     `,
     [title, excerpt, content, author, imageUrl],
   );
-
-  console.log(result);
 
   return result.rows[0];
 };
@@ -179,7 +177,7 @@ export const createArticle = async (
 export const getArticleById = async (id) => {
   const result = await db.query(
     `
-    SELECT id,title,excerpt,content,author,created_at FROM articles
+    SELECT * FROM articles
     WHERE id = $1
     `,
     [id],

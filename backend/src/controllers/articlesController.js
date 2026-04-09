@@ -45,6 +45,7 @@ export const addArticle = async (req, res, next) => {
       imageUrl = result.secure_url;
       console.log(imageUrl);
     }
+
     const newArticle = await createArticle(
       title,
       excerpt,
@@ -53,13 +54,12 @@ export const addArticle = async (req, res, next) => {
       imageUrl,
     );
 
-    console.log(newArticle);
-
     res.status(201).json({
       success: true,
       data: newArticle,
     });
   } catch (error) {
+    console.log("Caught in controller");
     next(error);
   }
 };

@@ -1,13 +1,13 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { X } from 'lucide-react';
-import { useArticles } from '../context/ArticlesContext';
+import { useParams, useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
+import { useArticles } from "../context/ArticlesContext";
 
 function ArticleDetails() {
   const { articleId } = useParams();
-  const navigate = useNavigate();
   const { articles } = useArticles();
 
   const article = articles.find((a) => a.id === Number(articleId));
+  console.log("Image URL:", article);
 
   if (!article) {
     return <p className="text-gray-400">Article not found</p>;
@@ -23,7 +23,10 @@ function ArticleDetails() {
         <h1 className="text-2xl font-semibold">{article.title}</h1>
       </div>
 
-      <p className="text-gray-700 whitespace-pre-wrap px-6">{article.content}</p>
+      <p className="text-gray-700 whitespace-pre-wrap px-6">
+        {article.content}
+      </p>
+      <img className="pl-6 w-48" src={article.imageurl} alt="" />
     </div>
   );
 }

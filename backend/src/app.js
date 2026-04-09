@@ -27,6 +27,7 @@ app.use("/api/articles", articleRouter);
 app.use("/api/kpi", kpiRouter);
 
 app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log(`The server is listening at port:${PORT}`);
 });

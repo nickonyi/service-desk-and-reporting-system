@@ -7,7 +7,7 @@ export default function AddArticle() {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
-  const { addArticle } = useArticles();
+  const { addArticle, loading } = useArticles();
 
   const handlePublish = async () => {
     if (!title || !content) {
@@ -94,7 +94,7 @@ export default function AddArticle() {
               onClick={handlePublish}
               className="rounded-lg cursor-pointer bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800"
             >
-              Publish
+              {loading ? "Publishing..." : "publish"}
             </button>
           </div>
         </div>
