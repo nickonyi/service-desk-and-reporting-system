@@ -1,5 +1,5 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
+import { useParams } from "react-router-dom";
+
 import { useArticles } from "../context/ArticlesContext";
 
 function ArticleDetails() {
@@ -7,7 +7,6 @@ function ArticleDetails() {
   const { articles } = useArticles();
 
   const article = articles.find((a) => a.id === Number(articleId));
-  console.log("Image URL:", article);
 
   if (!article) {
     return <p className="text-gray-400">Article not found</p>;
