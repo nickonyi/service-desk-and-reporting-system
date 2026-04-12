@@ -283,3 +283,15 @@ export const getEfrisTicketsByStore = async ({ days, startDate, endDate }) => {
 
   return result.rows;
 };
+
+export const updateArticleFromDb = async ({ title, content, excerpt, id }) => {
+  const result = await db.query(
+    "UPDATE articles SET title = $1, content = $2,excerpt=$3 WHERE id = $4 RETURNING *",
+    [title, content, excerpt, id],
+  );
+  return result.rows[0];
+};
+
+export const deleteArticleFromDb = async ({ id }) => {
+  await db.query("DELETE FROM articles WHERE id = $1", [id]);
+};

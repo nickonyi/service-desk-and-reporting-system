@@ -1,46 +1,50 @@
-import { createBrowserRouter } from 'react-router-dom';
-import ProtectedLayout from '../layouts/ProtectedLayout';
-import Login from '../pages/Login';
-import MainBoard from '../components/dashboardcomponents/MainBoard';
-import KnowledgeBase from '../components/KnowledgeBase';
-import AddArticle from '../components/AddarticleModal';
-import Dashboard from '../layouts/Dashboard';
-import NewTicketForm from '../components/NewTicketForm';
-import TicketList from '../components/TicketList';
-import ArticleDetails from '../pages/ArticleDetails';
+import { createBrowserRouter } from "react-router-dom";
+import ProtectedLayout from "../layouts/ProtectedLayout";
+import Login from "../pages/Login";
+import MainBoard from "../components/dashboardcomponents/MainBoard";
+import KnowledgeBase from "../components/KnowledgeBase";
+import AddArticle from "../components/AddarticleModal";
+import Dashboard from "../layouts/Dashboard";
+import NewTicketForm from "../components/NewTicketForm";
+import TicketList from "../components/TicketList";
+import ArticleDetails from "../pages/ArticleDetails";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Login />,
   },
   {
     element: <ProtectedLayout />,
     children: [
       {
-        path: '/dashboard',
+        path: "/dashboard",
         element: <Dashboard />,
         children: [
           { index: true, element: <MainBoard /> },
           {
-            path: 'knowledge',
+            path: "knowledge",
             element: <KnowledgeBase />,
           },
           {
-            path: 'knowledge/new',
+            path: "knowledge/new",
             element: <AddArticle />,
           },
           {
-            path: 'knowledge/:articleId',
+            path: "knowledge/:articleId",
             element: <ArticleDetails />,
           },
           {
-            path: 'tickets',
+            path: "tickets",
             element: <TicketList />,
           },
           {
-            path: 'tickets/new',
+            path: "tickets/new",
             element: <NewTicketForm />,
+          },
+          {
+            path: "knowledge/articles/:articleId/edit",
+            element: <AddArticle />,
           },
         ],
       },

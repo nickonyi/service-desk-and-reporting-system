@@ -1,4 +1,10 @@
-import { createArticle, getAllArtcicles, getArticleById } from "../db/query.js";
+import {
+  createArticle,
+  deleteArticleFromDb,
+  getAllArtcicles,
+  getArticleById,
+  updateArticleFromDb,
+} from "../db/query.js";
 import { streamUpload } from "../utils/streamer.js";
 
 export const fetchArticles = async (req, res, next) => {
@@ -61,5 +67,33 @@ export const addArticle = async (req, res, next) => {
   } catch (error) {
     console.log("Caught in controller");
     next(error);
+  }
+};
+
+export const updateArticle = async (req, res) => {
+  const { id, title, content, excerpt } = req.body;
+
+  try {
+    const updatedData = await updateArticleFromDb({
+      title,
+      content,
+      excerpt,
+      id,
+    });
+    res.json({ success: true, data: updatedData });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update article" });
+  }
+};
+
+export const deleteArticle = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteArticleFromDb({ id });
+    res.json({ success: true, message: "Article deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete article" });
   }
 };

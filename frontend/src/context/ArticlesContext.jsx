@@ -45,7 +45,6 @@ export const ArticlesProvider = ({ children }) => {
   const addArticle = async (formData) => {
     try {
       setLoading(true);
-      console.log(formData);
 
       const res = await fetch(`${API_URL}/api/articles`, {
         method: "POST",
@@ -64,8 +63,39 @@ export const ArticlesProvider = ({ children }) => {
     }
   };
 
+  const deleteArticle = async (id) => {
+    try {
+      await fetch(`${API_URL}/api/articles/${id}`, { method: "DELETE" });
+      setArticles((prev) => prev.filter((article) => article.id !== id));
+    } catch (err) {
+      console.error("Failed to delete article:", err);
+    }
+  };
+
+  const updateArticle = async (updatedArticle) => {
+    try {
+      const res = await fetch(`${API_URL}/api/articles/${updatedArticle.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedArticle),
+      });
+      const saved = await res.json();
+      console.log(saved);
+
+      setArticles((prev) =>
+        prev.map((article) =>
+          article.id === saved.data.id ? saved.data : article,
+        ),
+      );
+    } catch (err) {
+      console.error("Failed to update article:", err);
+    }
+  };
+
   return (
-    <ArticleContext.Provider value={{ articles, addArticle, loading }}>
+    <ArticleContext.Provider
+      value={{ articles, addArticle, loading, updateArticle, deleteArticle }}
+    >
       {children}
     </ArticleContext.Provider>
   );
