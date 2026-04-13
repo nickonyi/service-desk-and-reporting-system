@@ -6,7 +6,7 @@ dotenv.config();
 const { Pool } = pkg;
 
 export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL_DEV,
+  connectionString: process.env.DATABASE_URL_PROD,
 });
 
 export const query = async (text, params = []) => {
