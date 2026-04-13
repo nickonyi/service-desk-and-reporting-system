@@ -31,16 +31,20 @@ export default function AddArticle() {
 
     // EDIT MODE
     if (isEditMode) {
-      const updatedArticle = {
-        id: Number(articleId),
-        title,
-        content,
-        excerpt: content.slice(0, 150) + "...",
-        author: existingArticle?.author || "Admin",
-        imageurl: existingArticle?.imageurl,
-      };
+      const formData = new FormData();
 
-      await updateArticle(updatedArticle);
+      formData.append("id", Number(articleId));
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("excerpt", content.slice(0, 150) + "...");
+      formData.append("author", existingArticle?.author || "Admin");
+
+      // 👇 THIS is the missing piece
+      if (image) {
+        formData.append("image", image);
+      }
+
+      await updateArticle(formData);
     } else {
       //  CREATE MODE
       const formData = new FormData();

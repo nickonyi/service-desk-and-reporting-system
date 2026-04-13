@@ -71,14 +71,24 @@ export const addArticle = async (req, res, next) => {
 };
 
 export const updateArticle = async (req, res) => {
-  const { id, title, content, excerpt } = req.body;
+  const { title, content, excerpt } = req.body;
+  const { id } = req.params;
 
   try {
+    let imageUrl = null;
+
+    // If user uploaded an image, upload it to Cloudinary
+    if (req.file) {
+      const result = await streamUpload(req.file.buffer);
+      imageUrl = result.secure_url;
+      console.log(imageUrl);
+    }
     const updatedData = await updateArticleFromDb({
+      id,
       title,
       content,
       excerpt,
-      id,
+      imageUrl,
     });
     res.json({ success: true, data: updatedData });
   } catch (err) {

@@ -72,15 +72,15 @@ export const ArticlesProvider = ({ children }) => {
     }
   };
 
-  const updateArticle = async (updatedArticle) => {
+  const updateArticle = async (formData) => {
     try {
-      const res = await fetch(`${API_URL}/api/articles/${updatedArticle.id}`, {
+      setLoading(true);
+      const res = await fetch(`${API_URL}/api/articles/${formData.get("id")}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedArticle),
+        body: formData,
       });
+
       const saved = await res.json();
-      console.log(saved);
 
       setArticles((prev) =>
         prev.map((article) =>
@@ -89,6 +89,8 @@ export const ArticlesProvider = ({ children }) => {
       );
     } catch (err) {
       console.error("Failed to update article:", err);
+    } finally {
+      setLoading(false);
     }
   };
 

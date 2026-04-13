@@ -16,7 +16,7 @@ articleRouter.get("/:id", fetchArticleById);
 articleRouter.post("/", handleMulterErrors, addArticle);
 
 // PUT /api/articles/:id
-articleRouter.put("/:id", updateArticle);
+articleRouter.put("/:id", handleMulterErrors, updateArticle);
 
 // DELETE /api/articles/:id
 articleRouter.delete("/:id", deleteArticle);
